@@ -2,222 +2,1138 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
   <meta name="theme-color" content="#07110c">
+
+  <meta
+    name="description"
+    content="Santinho Finance — controle financeiro local, privado e simples."
+  >
+
+  <!-- Compatibilidade PWA -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Santinho Finance">
-  <meta name="description" content="Santinho Finance — controle financeiro local e privado.">
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="black-translucent"
+  >
+  <meta
+    name="apple-mobile-web-app-title"
+    content="Santinho Finance"
+  >
+
   <meta name="color-scheme" content="dark light">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self'; script-src 'self'; connect-src 'none'; font-src 'self'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';">
+
+  <!-- Segurança: o aplicativo não depende de APIs externas -->
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="
+      default-src 'self';
+      img-src 'self' data: blob:;
+      style-src 'self';
+      script-src 'self';
+      connect-src 'none';
+      font-src 'self';
+      media-src 'none';
+      object-src 'none';
+      base-uri 'none';
+      form-action 'none';
+      frame-ancestors 'none';
+    "
+  >
+
+  <!-- PWA -->
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="assets/logo-192.png" type="image/png">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+
+  <!-- Ícones -->
+  <link
+    rel="icon"
+    href="assets/logo-192.png"
+    type="image/png"
+  >
+
+  <link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="assets/apple-touch-icon.png"
+  >
+
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
+
   <title>Santinho Finance</title>
 </head>
+
 <body>
+
   <div id="app">
-    <section id="authView" class="auth-shell" aria-label="Autenticação">
+
+    <!-- =========================================================
+         AUTENTICAÇÃO
+    ========================================================== -->
+
+    <section
+      id="authView"
+      class="auth-shell"
+      aria-label="Autenticação"
+    >
+
       <div class="auth-card glass">
-        <img class="brand-logo" src="assets/logo.png" alt="Santinho Finance">
-        <p class="eyebrow">100% LOCAL • PRIVADO</p>
-        <h1 id="authTitle">Entrar no Santinho Finance</h1>
-        <p id="authSubtitle" class="muted">Seus dados financeiros permanecem neste aparelho.</p>
 
-        <form id="loginForm" class="form-stack" autocomplete="off">
-          <label>Username ou E-mail
-            <input id="loginIdentifier" name="identifier" autocomplete="username" required maxlength="120">
+        <img
+          class="brand-logo"
+          src="assets/logo.png"
+          alt="Santinho Finance"
+        >
+
+        <p class="eyebrow">
+          100% LOCAL • PRIVADO
+        </p>
+
+        <h1 id="authTitle">
+          Entrar no Santinho Finance
+        </h1>
+
+        <p id="authSubtitle" class="muted">
+          Seus dados financeiros permanecem neste aparelho.
+        </p>
+
+
+        <!-- LOGIN -->
+
+        <form
+          id="loginForm"
+          class="form-stack"
+          autocomplete="off"
+        >
+
+          <label>
+            Username ou E-mail
+
+            <input
+              id="loginIdentifier"
+              name="identifier"
+              type="text"
+              autocomplete="username"
+              maxlength="120"
+              required
+            >
           </label>
-          <label>Senha
-            <input id="loginPassword" name="password" type="password" autocomplete="current-password" required minlength="6">
+
+
+          <label>
+            Senha
+
+            <input
+              id="loginPassword"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              minlength="6"
+              maxlength="120"
+              required
+            >
           </label>
-          <button class="btn btn-primary btn-arte" type="submit">Entrar</button>
+
+
+          <button
+            class="btn btn-primary btn-arte"
+            type="submit"
+          >
+            Entrar
+          </button>
+
         </form>
 
-        <form id="setupForm" class="form-stack hidden" autocomplete="off">
-          <label>Nome de usuário
-            <input id="setupUsername" name="username" autocomplete="username" required maxlength="40">
+
+        <!-- PRIMEIRO ACESSO -->
+
+        <form
+          id="setupForm"
+          class="form-stack hidden"
+          autocomplete="off"
+        >
+
+          <label>
+            Nome de usuário
+
+            <input
+              id="setupUsername"
+              name="username"
+              type="text"
+              autocomplete="username"
+              maxlength="40"
+              required
+            >
           </label>
-          <label>E-mail
-            <input id="setupEmail" name="email" type="email" autocomplete="email" maxlength="120">
+
+
+          <label>
+            E-mail
+
+            <input
+              id="setupEmail"
+              name="email"
+              type="email"
+              autocomplete="email"
+              maxlength="120"
+            >
           </label>
-          <label>Senha
-            <input id="setupPassword" name="password" type="password" autocomplete="new-password" required minlength="6">
+
+
+          <label>
+            Senha
+
+            <input
+              id="setupPassword"
+              name="password"
+              type="password"
+              autocomplete="new-password"
+              minlength="6"
+              maxlength="120"
+              required
+            >
           </label>
-          <label>Confirmar senha
-            <input id="setupPassword2" name="password2" type="password" autocomplete="new-password" required minlength="6">
+
+
+          <label>
+            Confirmar senha
+
+            <input
+              id="setupPassword2"
+              name="password2"
+              type="password"
+              autocomplete="new-password"
+              minlength="6"
+              maxlength="120"
+              required
+            >
           </label>
-          <button class="btn btn-primary btn-arte" type="submit">Criar acesso local</button>
+
+
+          <button
+            class="btn btn-primary btn-arte"
+            type="submit"
+          >
+            Criar acesso local
+          </button>
+
         </form>
 
-        <button id="toggleSetup" class="link-btn" type="button">Primeiro acesso? Criar conta local</button>
-        <div id="authMessage" class="status-message" role="status" aria-live="polite"></div>
-      </div>
-    </section>
 
-    <section id="pinView" class="auth-shell hidden" aria-label="PIN">
-      <div class="pin-card glass">
-        <img class="pin-logo" src="assets/logo-192.png" alt="">
-        <p class="eyebrow">APP BLOQUEADO</p>
-        <h1>Digite seu PIN</h1>
-        <p class="muted">O PIN é solicitado novamente quando o app é aberto ou recarregado.</p>
-        <form id="pinForm" class="form-stack">
-          <input id="pinInput" class="pin-input" inputmode="numeric" pattern="[0-9]*" maxlength="6" minlength="4" type="password" autocomplete="one-time-code" placeholder="••••" required>
-          <button class="btn btn-primary" type="submit">Desbloquear</button>
-        </form>
-        <button id="logoutFromPin" class="link-btn" type="button">Sair da conta</button>
-        <div id="pinMessage" class="status-message" role="status" aria-live="polite"></div>
-      </div>
-    </section>
-
-    <main id="mainView" class="app-shell hidden">
-      <header class="topbar glass">
-        <button id="mobileBrand" class="brand-mini" type="button" data-nav="dashboard">
-          <img src="assets/logo-192.png" alt="">
-          <span>Santinho <b>Finance</b></span>
+        <button
+          id="toggleSetup"
+          class="link-btn"
+          type="button"
+        >
+          Primeiro acesso? Criar conta local
         </button>
+
+
+        <div
+          id="authMessage"
+          class="status-message"
+          role="status"
+          aria-live="polite"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         BLOQUEIO POR PIN
+    ========================================================== -->
+
+    <section
+      id="pinView"
+      class="auth-shell hidden"
+      aria-label="PIN"
+    >
+
+      <div class="pin-card glass">
+
+        <img
+          class="pin-logo"
+          src="assets/logo-192.png"
+          alt=""
+        >
+
+        <p class="eyebrow">
+          APP BLOQUEADO
+        </p>
+
+        <h1>
+          Digite seu PIN
+        </h1>
+
+        <p class="muted">
+          O PIN é solicitado novamente quando o app é aberto ou
+          recarregado.
+        </p>
+
+
+        <form
+          id="pinForm"
+          class="form-stack"
+          autocomplete="off"
+        >
+
+          <input
+            id="pinInput"
+            class="pin-input"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            maxlength="6"
+            minlength="4"
+            type="password"
+            autocomplete="one-time-code"
+            placeholder="••••"
+            required
+          >
+
+
+          <button
+            class="btn btn-primary"
+            type="submit"
+          >
+            Desbloquear
+          </button>
+
+        </form>
+
+
+        <button
+          id="logoutFromPin"
+          class="link-btn"
+          type="button"
+        >
+          Sair da conta
+        </button>
+
+
+        <div
+          id="pinMessage"
+          class="status-message"
+          role="status"
+          aria-live="polite"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         APLICAÇÃO PRINCIPAL
+    ========================================================== -->
+
+    <main
+      id="mainView"
+      class="app-shell hidden"
+    >
+
+      <!-- TOPBAR -->
+
+      <header class="topbar glass">
+
+        <button
+          id="mobileBrand"
+          class="brand-mini"
+          type="button"
+          data-nav="dashboard"
+          aria-label="Ir para o início"
+        >
+
+          <img
+            src="assets/logo-192.png"
+            alt=""
+          >
+
+          <span>
+            Santinho <b>Finance</b>
+          </span>
+
+        </button>
+
+
         <div class="topbar-actions">
-          <button id="lockNow" class="icon-btn" type="button" title="Bloquear app" aria-label="Bloquear app">🔒</button>
+
+          <button
+            id="lockNow"
+            class="icon-btn"
+            type="button"
+            title="Bloquear app"
+            aria-label="Bloquear app"
+          >
+            🔒
+          </button>
+
         </div>
+
       </header>
 
+
+      <!-- CONTEÚDO -->
+
       <div class="app-content">
-        <section id="page-dashboard" class="page active">
+
+
+        <!-- =====================================================
+             DASHBOARD
+        ====================================================== -->
+
+        <section
+          id="page-dashboard"
+          class="page active"
+        >
+
           <div class="welcome-row">
+
             <div>
-              <p class="eyebrow">DASHBOARD</p>
-              <h2>Olá, <span id="welcomeName">Nathan</span>! 👋</h2>
+
+              <p class="eyebrow">
+                DASHBOARD
+              </p>
+
+              <h2>
+                Olá,
+                <span id="welcomeName">Nathan</span>! 👋
+              </h2>
+
             </div>
-            <img id="dashboardAvatar" class="avatar" src="assets/logo-192.png" alt="Avatar">
+
+
+            <img
+              id="dashboardAvatar"
+              class="avatar"
+              src="assets/logo-192.png"
+              alt="Avatar"
+            >
+
           </div>
+
+
+          <!-- FRASE DO SANTINHO -->
 
           <article class="santinho-card glass">
-            <img src="assets/logo-192.png" alt="" class="santinho-face">
+
+            <img
+              src="assets/logo-192.png"
+              alt=""
+              class="santinho-face"
+            >
+
             <div>
-              <span class="eyebrow">CONSELHO DO SANTINHO</span>
-              <p id="motivation">Pequenos hábitos, grandes resultados.</p>
+
+              <span class="eyebrow">
+                CONSELHO DO SANTINHO
+              </span>
+
+              <p id="motivation">
+                Pequenos hábitos, grandes resultados.
+              </p>
+
             </div>
+
           </article>
+
+
+          <!-- SALDO -->
 
           <div class="balance-card glass">
+
             <div class="balance-head">
+
               <div>
-                <span class="muted">Saldo atual</span>
-                <strong id="balanceValue">R$ 0,00</strong>
+
+                <span class="muted">
+                  Saldo atual
+                </span>
+
+                <strong id="balanceValue">
+                  R$ 0,00
+                </strong>
+
               </div>
-              <button id="toggleBalance" class="ghost-btn" type="button">◉</button>
+
+
+              <button
+                id="toggleBalance"
+                class="ghost-btn"
+                type="button"
+                aria-label="Mostrar ou ocultar saldo"
+                title="Mostrar ou ocultar saldo"
+              >
+                ◉
+              </button>
+
             </div>
+
+
             <div class="balance-grid">
-              <div><span>Entradas</span><b id="incomeMonth">R$ 0,00</b></div>
-              <div><span>Despesas</span><b id="expenseMonth">R$ 0,00</b></div>
+
+              <div>
+
+                <span>
+                  Entradas
+                </span>
+
+                <b id="incomeMonth">
+                  R$ 0,00
+                </b>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  Despesas
+                </span>
+
+                <b id="expenseMonth">
+                  R$ 0,00
+                </b>
+
+              </div>
+
             </div>
+
           </div>
+
+
+          <!-- AÇÕES PRINCIPAIS -->
 
           <div class="action-grid">
-            <button id="addExpense" class="action-card expense btn-arte" type="button">
-              <span class="action-icon">−</span><span><b>Adicionar Despesa</b><small>Registrar gasto</small></span>
+
+            <button
+              id="addExpense"
+              class="action-card expense btn-arte"
+              type="button"
+            >
+
+              <span class="action-icon">
+                −
+              </span>
+
+              <span>
+                <b>
+                  Adicionar Despesa
+                </b>
+
+                <small>
+                  Registrar gasto
+                </small>
+              </span>
+
             </button>
-            <button id="addIncome" class="action-card income btn-arte" type="button">
-              <span class="action-icon">+</span><span><b>Adicionar Renda</b><small>Registrar entrada</small></span>
+
+
+            <button
+              id="addIncome"
+              class="action-card income btn-arte"
+              type="button"
+            >
+
+              <span class="action-icon">
+                +
+              </span>
+
+              <span>
+                <b>
+                  Adicionar Renda
+                </b>
+
+                <small>
+                  Registrar entrada
+                </small>
+              </span>
+
             </button>
+
           </div>
 
-          <div class="section-head">
-            <div><p class="eyebrow">RESUMO</p><h3>Despesas por categoria</h3></div>
-            <button class="link-btn" type="button" data-nav="transactions">Ver tudo</button>
-          </div>
-          <div id="categorySummary" class="category-list glass"></div>
+
+          <!-- CATEGORIAS -->
 
           <div class="section-head">
-            <div><p class="eyebrow">RECENTES</p><h3>Últimas transações</h3></div>
+
+            <div>
+
+              <p class="eyebrow">
+                RESUMO
+              </p>
+
+              <h3>
+                Despesas por categoria
+              </h3>
+
+            </div>
+
+
+            <button
+              class="link-btn"
+              type="button"
+              data-nav="transactions"
+            >
+              Ver tudo
+            </button>
+
           </div>
-          <div id="recentTransactions" class="transaction-list"></div>
+
+
+          <div
+            id="categorySummary"
+            class="category-list glass"
+          ></div>
+
+
+          <!-- TRANSAÇÕES RECENTES -->
+
+          <div class="section-head">
+
+            <div>
+
+              <p class="eyebrow">
+                RECENTES
+              </p>
+
+              <h3>
+                Últimas transações
+              </h3>
+
+            </div>
+
+          </div>
+
+
+          <div
+            id="recentTransactions"
+            class="transaction-list"
+          ></div>
+
         </section>
 
-        <section id="page-transactions" class="page">
+
+        <!-- =====================================================
+             TRANSAÇÕES
+        ====================================================== -->
+
+        <section
+          id="page-transactions"
+          class="page"
+        >
+
           <div class="page-heading">
-            <div><p class="eyebrow">MOVIMENTAÇÕES</p><h2>Transações</h2></div>
-            <button id="addTransactionTop" class="btn btn-primary btn-small" type="button">+ Adicionar</button>
+
+            <div>
+
+              <p class="eyebrow">
+                MOVIMENTAÇÕES
+              </p>
+
+              <h2>
+                Transações
+              </h2>
+
+            </div>
+
+
+            <button
+              id="addTransactionTop"
+              class="btn btn-primary btn-small"
+              type="button"
+            >
+              + Adicionar
+            </button>
+
           </div>
+
+
           <div class="filters glass">
-            <input id="transactionSearch" type="search" placeholder="Buscar descrição ou categoria..." aria-label="Buscar transações">
-            <select id="transactionType">
-              <option value="all">Todas</option><option value="expense">Despesas</option><option value="income">Rendas</option>
+
+            <input
+              id="transactionSearch"
+              type="search"
+              placeholder="Buscar descrição ou categoria..."
+              aria-label="Buscar transações"
+            >
+
+
+            <select
+              id="transactionType"
+              aria-label="Filtrar tipo de transação"
+            >
+
+              <option value="all">
+                Todas
+              </option>
+
+              <option value="expense">
+                Despesas
+              </option>
+
+              <option value="income">
+                Rendas
+              </option>
+
             </select>
+
           </div>
-          <div id="allTransactions" class="transaction-list"></div>
+
+
+          <div
+            id="allTransactions"
+            class="transaction-list"
+          ></div>
+
         </section>
 
-        <section id="page-goals" class="page">
+
+        <!-- =====================================================
+             METAS
+        ====================================================== -->
+
+        <section
+          id="page-goals"
+          class="page"
+        >
+
           <div class="page-heading">
-            <div><p class="eyebrow">PLANEJAMENTO</p><h2>Metas</h2></div>
-            <button id="addGoal" class="btn btn-primary btn-small" type="button">+ Nova meta</button>
+
+            <div>
+
+              <p class="eyebrow">
+                PLANEJAMENTO
+              </p>
+
+              <h2>
+                Metas
+              </h2>
+
+            </div>
+
+
+            <button
+              id="addGoal"
+              class="btn btn-primary btn-small"
+              type="button"
+            >
+              + Nova meta
+            </button>
+
           </div>
-          <div id="goalsList" class="goals-list"></div>
+
+
+          <div
+            id="goalsList"
+            class="goals-list"
+          ></div>
+
         </section>
 
-        <section id="page-profile" class="page">
+
+        <!-- =====================================================
+             PERFIL E CONFIGURAÇÕES
+        ====================================================== -->
+
+        <section
+          id="page-profile"
+          class="page"
+        >
+
           <div class="page-heading">
-            <div><p class="eyebrow">PREFERÊNCIAS</p><h2>Perfil & Configurações</h2></div>
+
+            <div>
+
+              <p class="eyebrow">
+                PREFERÊNCIAS
+              </p>
+
+              <h2>
+                Perfil & Configurações
+              </h2>
+
+            </div>
+
           </div>
+
+
+          <!-- PERFIL -->
 
           <article class="profile-card glass">
+
             <div class="profile-photo-wrap">
-              <img id="profileAvatar" class="profile-avatar" src="assets/logo-192.png" alt="Foto de perfil">
-              <label class="photo-edit">✎<input id="profilePhoto" type="file" accept="image/*" hidden></label>
+
+              <img
+                id="profileAvatar"
+                class="profile-avatar"
+                src="assets/logo-192.png"
+                alt="Foto de perfil"
+              >
+
+
+              <label
+                class="photo-edit"
+                title="Alterar foto"
+              >
+
+                ✎
+
+                <input
+                  id="profilePhoto"
+                  type="file"
+                  accept="image/*"
+                  hidden
+                >
+
+              </label>
+
             </div>
+
+
             <div class="profile-fields">
-              <label>Nome de usuário<input id="profileUsername" maxlength="40"></label>
-              <label>E-mail<input id="profileEmail" type="email" maxlength="120"></label>
-              <button id="saveProfile" class="btn btn-primary btn-small" type="button">Salvar perfil</button>
+
+              <label>
+                Nome de usuário
+
+                <input
+                  id="profileUsername"
+                  type="text"
+                  maxlength="40"
+                >
+
+              </label>
+
+
+              <label>
+                E-mail
+
+                <input
+                  id="profileEmail"
+                  type="email"
+                  maxlength="120"
+                >
+
+              </label>
+
+
+              <button
+                id="saveProfile"
+                class="btn btn-primary btn-small"
+                type="button"
+              >
+                Salvar perfil
+              </button>
+
             </div>
+
           </article>
+
+
+          <!-- CONFIGURAÇÕES -->
 
           <article class="settings-card glass">
+
+            <!-- TEMA -->
+
             <div class="setting-row">
-              <div><b>Modo escuro</b><small>Preferência salva somente neste aparelho.</small></div>
-              <label class="switch"><input id="themeSwitch" type="checkbox"><span></span></label>
+
+              <div>
+
+                <b>
+                  Modo escuro
+                </b>
+
+                <small>
+                  Preferência salva somente neste aparelho.
+                </small>
+
+              </div>
+
+
+              <label class="switch">
+
+                <input
+                  id="themeSwitch"
+                  type="checkbox"
+                >
+
+                <span></span>
+
+              </label>
+
             </div>
+
+
+            <!-- PIN -->
+
             <div class="setting-row">
-              <div><b>PIN de bloqueio</b><small id="pinStatus">Desativado</small></div>
-              <button id="configurePin" class="btn btn-secondary btn-small" type="button">Configurar</button>
+
+              <div>
+
+                <b>
+                  PIN de bloqueio
+                </b>
+
+                <small id="pinStatus">
+                  Desativado
+                </small>
+
+              </div>
+
+
+              <button
+                id="configurePin"
+                class="btn btn-secondary btn-small"
+                type="button"
+              >
+                Configurar
+              </button>
+
             </div>
+
           </article>
+
+
+          <!-- ===================================================
+               BACKUP
+          ==================================================== -->
 
           <article class="backup-card glass">
-            <p class="eyebrow">BACKUP DE SEGURANÇA</p>
-            <h3>Leve seus dados com você</h3>
-            <p class="muted">Gera um JSON consolidado com perfil, transações, metas e configurações. O arquivo é criado localmente.</p>
+
+            <p class="eyebrow">
+              BACKUP DE SEGURANÇA
+            </p>
+
+            <h3>
+              Leve seus dados com você
+            </h3>
+
+            <p class="muted">
+              Gera um JSON consolidado com perfil, transações,
+              metas e configurações. O arquivo é criado localmente.
+            </p>
+
+
             <div class="backup-actions">
-              <button id="backupNow" class="btn btn-primary btn-arte" type="button">Fazer Backup Agora</button>
-              <button id="restoreData" class="btn btn-secondary" type="button">Restaurar Dados</button>
-              <input id="restoreInput" type="file" accept=".json,application/json" hidden>
+
+              <button
+                id="backupNow"
+                class="btn btn-primary btn-arte"
+                type="button"
+              >
+                Fazer Backup Agora
+              </button>
+
+
+              <button
+                id="restoreData"
+                class="btn btn-secondary"
+                type="button"
+              >
+                Restaurar Dados
+              </button>
+
+
+              <input
+                id="restoreInput"
+                type="file"
+                accept=".json,application/json"
+                hidden
+              >
+
             </div>
-            <p id="lastBackupStatus" class="backup-last" role="status">Nenhum backup feito ainda.</p>
-            <p id="backupStatus" class="status-message" role="status"></p>
-            <div class="backup-tip"><b>📱 No iPhone:</b> toque em <strong>Fazer Backup Agora</strong> → <strong>Salvar em Arquivos</strong> → <strong>iCloud Drive</strong>. Não apague os backups antigos.</div>
+
+
+            <p
+              id="lastBackupStatus"
+              class="backup-last"
+              role="status"
+            >
+              Nenhum backup feito ainda.
+            </p>
+
+
+            <p
+              id="backupStatus"
+              class="status-message"
+              role="status"
+              aria-live="polite"
+            ></p>
+
+
+            <div class="backup-tip">
+
+              <b>
+                📱 No iPhone:
+              </b>
+
+              toque em
+              <strong>
+                Fazer Backup Agora
+              </strong>
+
+              →
+
+              <strong>
+                Salvar em Arquivos
+              </strong>
+
+              →
+
+              <strong>
+                iCloud Drive
+              </strong>.
+
+              Não apague os backups antigos.
+
+            </div>
+
           </article>
+
+
+          <!-- SESSÃO -->
 
           <article class="danger-card glass">
-            <p class="eyebrow">SESSÃO</p>
-            <button id="logout" class="btn btn-secondary" type="button">Sair da conta</button>
+
+            <p class="eyebrow">
+              SESSÃO
+            </p>
+
+            <button
+              id="logout"
+              class="btn btn-secondary"
+              type="button"
+            >
+              Sair da conta
+            </button>
+
           </article>
+
         </section>
+
       </div>
 
-      <nav class="bottom-nav glass" aria-label="Navegação principal">
-        <button class="nav-btn active" data-nav="dashboard" type="button"><span>⌂</span><small>Início</small></button>
-        <button class="nav-btn" data-nav="transactions" type="button"><span>⇄</span><small>Transações</small></button>
-        <button class="nav-btn" data-nav="goals" type="button"><span>◎</span><small>Metas</small></button>
-        <button class="nav-btn" data-nav="profile" type="button"><span>●</span><small>Perfil</small></button>
+
+      <!-- =======================================================
+           NAVEGAÇÃO INFERIOR
+      ======================================================== -->
+
+      <nav
+        class="bottom-nav glass"
+        aria-label="Navegação principal"
+      >
+
+        <button
+          class="nav-btn active"
+          data-nav="dashboard"
+          type="button"
+        >
+
+          <span>
+            ⌂
+          </span>
+
+          <small>
+            Início
+          </small>
+
+        </button>
+
+
+        <button
+          class="nav-btn"
+          data-nav="transactions"
+          type="button"
+        >
+
+          <span>
+            ⇄
+          </span>
+
+          <small>
+            Transações
+          </small>
+
+        </button>
+
+
+        <button
+          class="nav-btn"
+          data-nav="goals"
+          type="button"
+        >
+
+          <span>
+            ◎
+          </span>
+
+          <small>
+            Metas
+          </small>
+
+        </button>
+
+
+        <button
+          class="nav-btn"
+          data-nav="profile"
+          type="button"
+        >
+
+          <span>
+            ●
+          </span>
+
+          <small>
+            Perfil
+          </small>
+
+        </button>
+
       </nav>
+
     </main>
 
-    <div id="modalRoot" class="modal-root hidden"></div>
-    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <!-- =========================================================
+         MODAL
+    ========================================================== -->
+
+    <div
+      id="modalRoot"
+      class="modal-root hidden"
+      aria-hidden="true"
+    ></div>
+
+
+    <!-- =========================================================
+         TOAST
+    ========================================================== -->
+
+    <div
+      id="toast"
+      class="toast"
+      role="status"
+      aria-live="polite"
+    ></div>
+
   </div>
-  <script src="app.js" defer></script>
+
+
+  <!-- JavaScript principal -->
+  <script
+    src="app.js"
+    defer
+  ></script>
+
 </body>
 </html>
