@@ -1,18 +1,32 @@
 {
   "name": "Santinho Finance",
   "short_name": "Santinho",
-  "description": "Controle financeiro pessoal local e privado.",
+  "description": "Controle financeiro pessoal local, privado e seguro.",
   "lang": "pt-BR",
   "dir": "ltr",
-  "start_url": "./",
   "id": "santinho-finance",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#07110c",
   "theme_color": "#07110c",
   "orientation": "portrait-primary",
+  "categories": [
+    "finance",
+    "productivity"
+  ],
   "icons": [
-    {"src":"assets/logo-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
-    {"src":"assets/logo-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+    {
+      "src": "assets/logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }
