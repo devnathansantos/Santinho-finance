@@ -9,13 +9,6 @@
   >
 
   <meta name="theme-color" content="#07110c">
-
-  <meta
-    name="description"
-    content="Santinho Finance — controle financeiro local, privado e simples."
-  >
-
-  <!-- Compatibilidade PWA -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta
@@ -27,30 +20,20 @@
     content="Santinho Finance"
   >
 
-  <meta name="color-scheme" content="dark light">
-
-  <!-- Segurança: o aplicativo não depende de APIs externas -->
   <meta
-    http-equiv="Content-Security-Policy"
-    content="
-      default-src 'self';
-      img-src 'self' data: blob:;
-      style-src 'self';
-      script-src 'self';
-      connect-src 'none';
-      font-src 'self';
-      media-src 'none';
-      object-src 'none';
-      base-uri 'none';
-      form-action 'none';
-      frame-ancestors 'none';
-    "
+    name="description"
+    content="Santinho Finance — controle financeiro local, privado e pessoal."
   >
 
-  <!-- PWA -->
+  <meta name="color-scheme" content="dark light">
+
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; img-src 'self' data: blob:; style-src 'self'; script-src 'self'; connect-src 'none'; font-src 'self'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';"
+  >
+
   <link rel="manifest" href="manifest.json">
 
-  <!-- Ícones -->
   <link
     rel="icon"
     href="assets/logo-192.png"
@@ -63,7 +46,6 @@
     href="assets/apple-touch-icon.png"
   >
 
-  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
 
   <title>Santinho Finance</title>
@@ -73,9 +55,9 @@
 
   <div id="app">
 
-    <!-- =========================================================
+    <!-- =====================================================
          AUTENTICAÇÃO
-    ========================================================== -->
+         ===================================================== -->
 
     <section
       id="authView"
@@ -99,7 +81,10 @@
           Entrar no Santinho Finance
         </h1>
 
-        <p id="authSubtitle" class="muted">
+        <p
+          id="authSubtitle"
+          class="muted"
+        >
           Seus dados financeiros permanecem neste aparelho.
         </p>
 
@@ -118,13 +103,11 @@
             <input
               id="loginIdentifier"
               name="identifier"
-              type="text"
               autocomplete="username"
-              maxlength="120"
               required
+              maxlength="120"
             >
           </label>
-
 
           <label>
             Senha
@@ -134,12 +117,10 @@
               name="password"
               type="password"
               autocomplete="current-password"
-              minlength="6"
-              maxlength="120"
               required
+              minlength="6"
             >
           </label>
-
 
           <button
             class="btn btn-primary btn-arte"
@@ -151,7 +132,7 @@
         </form>
 
 
-        <!-- PRIMEIRO ACESSO -->
+        <!-- CRIAÇÃO DA CONTA LOCAL -->
 
         <form
           id="setupForm"
@@ -165,13 +146,11 @@
             <input
               id="setupUsername"
               name="username"
-              type="text"
               autocomplete="username"
-              maxlength="40"
               required
+              maxlength="40"
             >
           </label>
-
 
           <label>
             E-mail
@@ -185,7 +164,6 @@
             >
           </label>
 
-
           <label>
             Senha
 
@@ -194,12 +172,10 @@
               name="password"
               type="password"
               autocomplete="new-password"
-              minlength="6"
-              maxlength="120"
               required
+              minlength="6"
             >
           </label>
-
 
           <label>
             Confirmar senha
@@ -209,12 +185,10 @@
               name="password2"
               type="password"
               autocomplete="new-password"
-              minlength="6"
-              maxlength="120"
               required
+              minlength="6"
             >
           </label>
-
 
           <button
             class="btn btn-primary btn-arte"
@@ -234,7 +208,6 @@
           Primeiro acesso? Criar conta local
         </button>
 
-
         <div
           id="authMessage"
           class="status-message"
@@ -247,9 +220,9 @@
     </section>
 
 
-    <!-- =========================================================
-         BLOQUEIO POR PIN
-    ========================================================== -->
+    <!-- =====================================================
+         PIN
+         ===================================================== -->
 
     <section
       id="pinView"
@@ -274,15 +247,12 @@
         </h1>
 
         <p class="muted">
-          O PIN é solicitado novamente quando o app é aberto ou
-          recarregado.
+          O PIN protege o acesso ao aplicativo neste aparelho.
         </p>
-
 
         <form
           id="pinForm"
           class="form-stack"
-          autocomplete="off"
         >
 
           <input
@@ -298,7 +268,6 @@
             required
           >
 
-
           <button
             class="btn btn-primary"
             type="submit"
@@ -308,7 +277,6 @@
 
         </form>
 
-
         <button
           id="logoutFromPin"
           class="link-btn"
@@ -316,7 +284,6 @@
         >
           Sair da conta
         </button>
-
 
         <div
           id="pinMessage"
@@ -330,16 +297,18 @@
     </section>
 
 
-    <!-- =========================================================
-         APLICAÇÃO PRINCIPAL
-    ========================================================== -->
+    <!-- =====================================================
+         APLICATIVO
+         ===================================================== -->
 
     <main
       id="mainView"
       class="app-shell hidden"
     >
 
-      <!-- TOPBAR -->
+      <!-- ===================================================
+           TOPO
+           =================================================== -->
 
       <header class="topbar glass">
 
@@ -369,8 +338,8 @@
             id="lockNow"
             class="icon-btn"
             type="button"
-            title="Bloquear app"
-            aria-label="Bloquear app"
+            title="Bloquear aplicativo"
+            aria-label="Bloquear aplicativo"
           >
             🔒
           </button>
@@ -380,14 +349,16 @@
       </header>
 
 
-      <!-- CONTEÚDO -->
+      <!-- ===================================================
+           CONTEÚDO
+           =================================================== -->
 
       <div class="app-content">
 
 
-        <!-- =====================================================
-             DASHBOARD
-        ====================================================== -->
+        <!-- =================================================
+             INÍCIO
+             ================================================= -->
 
         <section
           id="page-dashboard"
@@ -404,11 +375,13 @@
 
               <h2>
                 Olá,
-                <span id="welcomeName">Nathan</span>! 👋
+                <span id="welcomeName">
+                  Nathan
+                </span>!
+                👋
               </h2>
 
             </div>
-
 
             <img
               id="dashboardAvatar"
@@ -463,13 +436,11 @@
 
               </div>
 
-
               <button
                 id="toggleBalance"
                 class="ghost-btn"
                 type="button"
-                aria-label="Mostrar ou ocultar saldo"
-                title="Mostrar ou ocultar saldo"
+                aria-label="Mostrar ou esconder saldo"
               >
                 ◉
               </button>
@@ -491,7 +462,6 @@
 
               </div>
 
-
               <div>
 
                 <span>
@@ -509,7 +479,7 @@
           </div>
 
 
-          <!-- AÇÕES PRINCIPAIS -->
+          <!-- AÇÕES RÁPIDAS -->
 
           <div class="action-grid">
 
@@ -524,6 +494,7 @@
               </span>
 
               <span>
+
                 <b>
                   Adicionar Despesa
                 </b>
@@ -531,6 +502,7 @@
                 <small>
                   Registrar gasto
                 </small>
+
               </span>
 
             </button>
@@ -547,6 +519,7 @@
               </span>
 
               <span>
+
                 <b>
                   Adicionar Renda
                 </b>
@@ -554,6 +527,7 @@
                 <small>
                   Registrar entrada
                 </small>
+
               </span>
 
             </button>
@@ -577,13 +551,12 @@
 
             </div>
 
-
             <button
               class="link-btn"
               type="button"
-              data-nav="transactions"
+              data-nav="analysis"
             >
-              Ver tudo
+              Ver análise
             </button>
 
           </div>
@@ -622,9 +595,255 @@
         </section>
 
 
-        <!-- =====================================================
+        <!-- =================================================
+             ANÁLISE
+             ================================================= -->
+
+        <section
+          id="page-analysis"
+          class="page"
+        >
+
+          <div class="page-heading">
+
+            <div>
+
+              <p class="eyebrow">
+                ANÁLISE FINANCEIRA
+              </p>
+
+              <h2>
+                Gastos do ano
+              </h2>
+
+            </div>
+
+            <select
+              id="analysisYear"
+              class="year-select"
+              aria-label="Selecionar ano"
+            ></select>
+
+          </div>
+
+
+          <!-- TOTAL DO ANO -->
+
+          <article class="analysis-hero glass">
+
+            <div>
+
+              <span class="muted">
+                Total gasto no ano
+              </span>
+
+              <strong id="analysisYearExpense">
+                R$ 0,00
+              </strong>
+
+            </div>
+
+            <span
+              id="analysisYearLabel"
+              class="analysis-year-label"
+            >
+              2026
+            </span>
+
+          </article>
+
+
+          <!-- RESUMO ANUAL -->
+
+          <div class="analysis-summary-grid">
+
+            <article class="analysis-stat glass">
+
+              <span>
+                Entradas
+              </span>
+
+              <strong id="analysisIncome">
+                R$ 0,00
+              </strong>
+
+            </article>
+
+
+            <article class="analysis-stat glass">
+
+              <span>
+                Despesas
+              </span>
+
+              <strong id="analysisExpense">
+                R$ 0,00
+              </strong>
+
+            </article>
+
+
+            <article class="analysis-stat glass">
+
+              <span>
+                Saldo
+              </span>
+
+              <strong id="analysisBalance">
+                R$ 0,00
+              </strong>
+
+            </article>
+
+
+            <article class="analysis-stat glass">
+
+              <span>
+                Média mensal
+              </span>
+
+              <strong id="analysisAverage">
+                R$ 0,00
+              </strong>
+
+            </article>
+
+          </div>
+
+
+          <!-- BARRAS MENSAIS -->
+
+          <article class="analysis-card glass">
+
+            <div class="section-head">
+
+              <div>
+
+                <p class="eyebrow">
+                  EVOLUÇÃO
+                </p>
+
+                <h3>
+                  Gastos por mês
+                </h3>
+
+              </div>
+
+            </div>
+
+
+            <div
+              id="yearlyExpenseChart"
+              class="yearly-chart"
+              aria-label="Gráfico de gastos mensais"
+            ></div>
+
+          </article>
+
+
+          <!-- INDICADORES -->
+
+          <div class="analysis-insights">
+
+            <article class="analysis-insight glass">
+
+              <span>
+                Maior gasto mensal
+              </span>
+
+              <strong id="highestExpenseMonth">
+                —
+              </strong>
+
+              <small id="highestExpenseMonthValue">
+                R$ 0,00
+              </small>
+
+            </article>
+
+
+            <article class="analysis-insight glass">
+
+              <span>
+                Mês com menor gasto
+              </span>
+
+              <strong id="lowestExpenseMonth">
+                —
+              </strong>
+
+              <small id="lowestExpenseMonthValue">
+                R$ 0,00
+              </small>
+
+            </article>
+
+          </div>
+
+
+          <!-- CATEGORIAS DO ANO -->
+
+          <article class="analysis-card glass">
+
+            <div class="section-head">
+
+              <div>
+
+                <p class="eyebrow">
+                  CATEGORIAS
+                </p>
+
+                <h3>
+                  Onde seu dinheiro foi gasto
+                </h3>
+
+              </div>
+
+            </div>
+
+
+            <div
+              id="yearlyCategoryChart"
+              class="category-list"
+            ></div>
+
+          </article>
+
+
+          <!-- COMPARAÇÃO -->
+
+          <article class="analysis-card glass">
+
+            <div class="section-head">
+
+              <div>
+
+                <p class="eyebrow">
+                  COMPARAÇÃO
+                </p>
+
+                <h3>
+                  Entradas x despesas
+                </h3>
+
+              </div>
+
+            </div>
+
+
+            <div
+              id="incomeExpenseChart"
+              class="income-expense-chart"
+            ></div>
+
+          </article>
+
+        </section>
+
+
+        <!-- =================================================
              TRANSAÇÕES
-        ====================================================== -->
+             ================================================= -->
 
         <section
           id="page-transactions"
@@ -644,7 +863,6 @@
               </h2>
 
             </div>
-
 
             <button
               id="addTransactionTop"
@@ -666,11 +884,7 @@
               aria-label="Buscar transações"
             >
 
-
-            <select
-              id="transactionType"
-              aria-label="Filtrar tipo de transação"
-            >
+            <select id="transactionType">
 
               <option value="all">
                 Todas
@@ -697,9 +911,9 @@
         </section>
 
 
-        <!-- =====================================================
+        <!-- =================================================
              METAS
-        ====================================================== -->
+             ================================================= -->
 
         <section
           id="page-goals"
@@ -720,7 +934,6 @@
 
             </div>
 
-
             <button
               id="addGoal"
               class="btn btn-primary btn-small"
@@ -740,9 +953,9 @@
         </section>
 
 
-        <!-- =====================================================
-             PERFIL E CONFIGURAÇÕES
-        ====================================================== -->
+        <!-- =================================================
+             PERFIL
+             ================================================= -->
 
         <section
           id="page-profile"
@@ -779,12 +992,11 @@
                 alt="Foto de perfil"
               >
 
-
               <label
                 class="photo-edit"
-                title="Alterar foto"
+                for="profilePhoto"
+                aria-label="Alterar foto"
               >
-
                 ✎
 
                 <input
@@ -806,7 +1018,6 @@
 
                 <input
                   id="profileUsername"
-                  type="text"
                   maxlength="40"
                 >
 
@@ -842,8 +1053,6 @@
 
           <article class="settings-card glass">
 
-            <!-- TEMA -->
-
             <div class="setting-row">
 
               <div>
@@ -873,8 +1082,6 @@
             </div>
 
 
-            <!-- PIN -->
-
             <div class="setting-row">
 
               <div>
@@ -903,9 +1110,7 @@
           </article>
 
 
-          <!-- ===================================================
-               BACKUP
-          ==================================================== -->
+          <!-- BACKUP -->
 
           <article class="backup-card glass">
 
@@ -918,8 +1123,8 @@
             </h3>
 
             <p class="muted">
-              Gera um JSON consolidado com perfil, transações,
-              metas e configurações. O arquivo é criado localmente.
+              Gere um arquivo JSON com seu perfil,
+              transações, metas e configurações.
             </p>
 
 
@@ -966,7 +1171,6 @@
               id="backupStatus"
               class="status-message"
               role="status"
-              aria-live="polite"
             ></p>
 
 
@@ -982,13 +1186,11 @@
               </strong>
 
               →
-
               <strong>
                 Salvar em Arquivos
               </strong>
 
               →
-
               <strong>
                 iCloud Drive
               </strong>.
@@ -1023,9 +1225,9 @@
       </div>
 
 
-      <!-- =======================================================
-           NAVEGAÇÃO INFERIOR
-      ======================================================== -->
+      <!-- ===================================================
+           BARRA DE NAVEGAÇÃO
+           =================================================== -->
 
       <nav
         class="bottom-nav glass"
@@ -1036,6 +1238,8 @@
           class="nav-btn active"
           data-nav="dashboard"
           type="button"
+          aria-label="Início"
+          aria-current="page"
         >
 
           <span>
@@ -1051,8 +1255,27 @@
 
         <button
           class="nav-btn"
+          data-nav="analysis"
+          type="button"
+          aria-label="Análise"
+        >
+
+          <span>
+            ◫
+          </span>
+
+          <small>
+            Análise
+          </small>
+
+        </button>
+
+
+        <button
+          class="nav-btn"
           data-nav="transactions"
           type="button"
+          aria-label="Transações"
         >
 
           <span>
@@ -1070,6 +1293,7 @@
           class="nav-btn"
           data-nav="goals"
           type="button"
+          aria-label="Metas"
         >
 
           <span>
@@ -1087,6 +1311,7 @@
           class="nav-btn"
           data-nav="profile"
           type="button"
+          aria-label="Perfil"
         >
 
           <span>
@@ -1104,20 +1329,19 @@
     </main>
 
 
-    <!-- =========================================================
-         MODAL
-    ========================================================== -->
+    <!-- =====================================================
+         MODAIS
+         ===================================================== -->
 
     <div
       id="modalRoot"
       class="modal-root hidden"
-      aria-hidden="true"
     ></div>
 
 
-    <!-- =========================================================
+    <!-- =====================================================
          TOAST
-    ========================================================== -->
+         ===================================================== -->
 
     <div
       id="toast"
@@ -1129,7 +1353,10 @@
   </div>
 
 
-  <!-- JavaScript principal -->
+  <!-- =======================================================
+       JAVASCRIPT
+       ======================================================= -->
+
   <script
     src="app.js"
     defer
