@@ -1,4 +1,5 @@
-const CACHE = "santinho-finance-v2";
+const CACHE = "santinho-finance-v3";
+
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -22,28 +23,45 @@ self.addEventListener("install", event => {
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(keys =>
+        Promise.all(
+          keys
+            .filter(key => key.startsWith("santinho-finance-") && key !== CACHE)
+            .map(key => caches.delete(key))
+        )
+      )
       .then(() => self.clients.claim())
   );
 });
 
 self.addEventListener("fetch", event => {
-  const req = event.request;
-  if (req.method !== "GET") return;
-  const url = new URL(req.url);
+  const request = event.request;
 
-  // Santinho Finance never caches or handles cross-origin resources.
+  if (request.method !== "GET") return;
+
+  const url = new URL(request.url);
+
+  // O Santinho Finance trabalha somente com recursos do próprio domínio.
   if (url.origin !== self.location.origin) return;
 
   event.respondWith(
-    caches.match(req).then(cached => {
-      if (cached) return cached;
-      return fetch(req)
+    caches.match(request).then(cached => {
+      if (cached) {
+        return cached;
+      }
+
+      return fetch(request)
         .then(response => {
-          if (response.ok) {
-            const copy = response.clone();
-            caches.open(CACHE).then(cache => cache.put(req, copy));
+          if (!response || !response.ok) {
+            return response;
           }
+
+          const copy = response.clone();
+
+          caches.open(CACHE).then(cache => {
+            cache.put(request, copy);
+          });
+
           return response;
         })
         .catch(() => caches.match("./index.html"));
