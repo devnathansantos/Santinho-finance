@@ -1193,7 +1193,7 @@
 
       $("#dashboardAvatar").src =
         state.profile.avatar ||
-        "assets/logo-192.png";
+        "logo-192.png";
     }
 
 
@@ -2281,7 +2281,7 @@
 
       $("#profileAvatar").src =
         state.profile.avatar ||
-        "assets/logo-192.png";
+        "logo-192.png";
     }
 
 
