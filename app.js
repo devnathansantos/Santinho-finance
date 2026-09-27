@@ -60,6 +60,95 @@
 
 
   /* =======================================================
+     NOVOS HELPERS
+     ======================================================= */
+
+  function parseBRL(value) {
+
+    if (typeof value === "number") {
+
+      return Number.isFinite(value)
+        ? value
+        : NaN;
+    }
+
+    const raw =
+      String(value ?? "")
+        .trim()
+        .replace(/\s/g, "");
+
+    if (!raw) {
+      return NaN;
+    }
+
+    const normalized =
+      raw.includes(",")
+        ? raw
+            .replace(/\./g, "")
+            .replace(",", ".")
+        : raw;
+
+    const number =
+      Number(normalized);
+
+    return Number.isFinite(number)
+      ? number
+      : NaN;
+  }
+
+
+  function todayKey() {
+
+    const date = new Date();
+
+    const year =
+      date.getFullYear();
+
+    const month =
+      String(
+        date.getMonth() + 1
+      ).padStart(2, "0");
+
+    const day =
+      String(
+        date.getDate()
+      ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
+
+  function isTransactionEffective(
+    transaction
+  ) {
+
+    if (!transaction?.date) {
+      return true;
+    }
+
+    return (
+      String(transaction.date) <=
+      todayKey()
+    );
+  }
+
+
+  function isFutureTransaction(
+    transaction
+  ) {
+
+    if (!transaction?.date) {
+      return false;
+    }
+
+    return (
+      String(transaction.date) >
+      todayKey()
+    );
+  }
+
+
+  /* =======================================================
      MOTIVAÇÕES
      ======================================================= */
 
@@ -97,9 +186,10 @@
     goals: [],
 
     settings: {
-      theme: "dark",
+      theme: "system",
       pinHash: null,
-      lastBackupAt: null
+      lastBackupAt: null,
+      privacyDismissed: false
     },
 
     motivationHistory: [],
@@ -130,63 +220,94 @@
      ======================================================= */
 
   function openDB() {
+
     return new Promise((resolve, reject) => {
 
       const request =
-        indexedDB.open(DB_NAME, DB_VERSION);
+        indexedDB.open(
+          DB_NAME,
+          DB_VERSION
+        );
 
       request.onupgradeneeded = () => {
 
-        const database = request.result;
+        const database =
+          request.result;
 
         if (
-          !database.objectStoreNames.contains(STORE)
+          !database.objectStoreNames.contains(
+            STORE
+          )
         ) {
-          database.createObjectStore(STORE);
+
+          database.createObjectStore(
+            STORE
+          );
         }
       };
 
       request.onsuccess = () =>
-        resolve(request.result);
+        resolve(
+          request.result
+        );
 
       request.onerror = () =>
-        reject(request.error);
+        reject(
+          request.error
+        );
     });
   }
 
 
   function idbGet(key) {
+
     return new Promise((resolve, reject) => {
 
       const request =
         db
-          .transaction(STORE, "readonly")
+          .transaction(
+            STORE,
+            "readonly"
+          )
           .objectStore(STORE)
           .get(key);
 
       request.onsuccess = () =>
-        resolve(request.result);
+        resolve(
+          request.result
+        );
 
       request.onerror = () =>
-        reject(request.error);
+        reject(
+          request.error
+        );
     });
   }
 
 
   function idbSet(key, value) {
+
     return new Promise((resolve, reject) => {
 
       const request =
         db
-          .transaction(STORE, "readwrite")
+          .transaction(
+            STORE,
+            "readwrite"
+          )
           .objectStore(STORE)
-          .put(value, key);
+          .put(
+            value,
+            key
+          );
 
       request.onsuccess = () =>
         resolve();
 
       request.onerror = () =>
-        reject(request.error);
+        reject(
+          request.error
+        );
     });
   }
 
@@ -206,7 +327,9 @@
 
       const fromLS =
         JSON.parse(
-          localStorage.getItem(LS_KEY) || "null"
+          localStorage.getItem(
+            LS_KEY
+          ) || "null"
         );
 
       const candidate =
@@ -216,9 +339,14 @@
         candidate &&
         candidate.schema === SCHEMA
       ) {
-        state = normalize(candidate);
+
+        state =
+          normalize(candidate);
+
       } else {
-        state = defaultState();
+
+        state =
+          defaultState();
       }
 
     } catch {
@@ -227,19 +355,23 @@
 
         const fromLS =
           JSON.parse(
-            localStorage.getItem(LS_KEY) || "null"
+            localStorage.getItem(
+              LS_KEY
+            ) || "null"
           );
 
         if (
           fromLS?.schema === SCHEMA
         ) {
-          state = normalize(fromLS);
+
+          state =
+            normalize(fromLS);
         }
 
       } catch {
 
-        state = defaultState();
-
+        state =
+          defaultState();
       }
     }
 
@@ -273,17 +405,37 @@
       },
 
       transactions:
-        Array.isArray(raw.transactions)
-          ? raw.transactions
+        Array.isArray(
+          raw.transactions
+        )
+          ? raw.transactions.map(
+              transaction => ({
+                ...transaction,
+
+                scheduled:
+                  transaction?.scheduled === true ||
+                  (
+                    String(
+                      transaction?.date || ""
+                    ) > todayKey() &&
+                    transaction?.recurrence &&
+                    transaction.recurrence !== "none"
+                  )
+              })
+            )
           : [],
 
       goals:
-        Array.isArray(raw.goals)
+        Array.isArray(
+          raw.goals
+        )
           ? raw.goals
           : [],
 
       motivationHistory:
-        Array.isArray(raw.motivationHistory)
+        Array.isArray(
+          raw.motivationHistory
+        )
           ? raw.motivationHistory
           : []
     };
@@ -302,43 +454,49 @@
       new Date().toISOString();
 
     try {
+
       localStorage.setItem(
         LS_KEY,
         JSON.stringify(state)
       );
+
     } catch (error) {
+
       console.warn(
         "localStorage save failed",
         error
       );
     }
 
-    clearTimeout(saveTimer);
+    clearTimeout(
+      saveTimer
+    );
 
-    saveTimer = setTimeout(
-      async () => {
+    saveTimer =
+      setTimeout(
+        async () => {
 
-        try {
+          try {
 
-          if (db) {
-            await idbSet(
-              "state",
-              state
+            if (db) {
+
+              await idbSet(
+                "state",
+                state
+              );
+            }
+
+          } catch (error) {
+
+            console.warn(
+              "IndexedDB save failed",
+              error
             );
           }
 
-        } catch (error) {
-
-          console.warn(
-            "IndexedDB save failed",
-            error
-          );
-
-        }
-
-      },
-      0
-    );
+        },
+        0
+      );
   }
 
 
@@ -346,12 +504,17 @@
      CRIPTOGRAFIA
      ======================================================= */
 
-  async function hashSecret(secret, salt) {
+  async function hashSecret(
+    secret,
+    salt
+  ) {
 
     const keyMaterial =
       await crypto.subtle.importKey(
         "raw",
-        new TextEncoder().encode(secret),
+        new TextEncoder().encode(
+          secret
+        ),
         "PBKDF2",
         false,
         ["deriveBits"]
@@ -361,12 +524,19 @@
       await crypto.subtle.deriveBits(
         {
           name: "PBKDF2",
+
           salt:
-            new TextEncoder().encode(salt),
+            new TextEncoder().encode(
+              salt
+            ),
+
           iterations: 150000,
+
           hash: "SHA-256"
         },
+
         keyMaterial,
+
         256
       );
 
@@ -388,6 +558,7 @@
   ) {
 
     return {
+
       identifier:
         identifier
           .trim()
@@ -413,9 +584,11 @@
       "mainView"
     ].forEach(id => {
 
-      const element = $("#" + id);
+      const element =
+        $("#" + id);
 
       if (element) {
+
         element.classList.toggle(
           "hidden",
           id !== view
@@ -520,7 +693,9 @@
   }
 
 
-  async function setupAccount(event) {
+  async function setupAccount(
+    event
+  ) {
 
     event.preventDefault();
 
@@ -607,7 +782,9 @@
   }
 
 
-  async function login(event) {
+  async function login(
+    event
+  ) {
 
     event.preventDefault();
 
@@ -665,7 +842,8 @@
       );
 
     if (
-      digest !== credentials.passwordHash
+      digest !==
+      credentials.passwordHash
     ) {
 
       return authMessage(
@@ -687,10 +865,12 @@
 
       show("pinView");
 
-      $("#pinInput").value = "";
+      $("#pinInput").value =
+        "";
 
       setTimeout(
-        () => $("#pinInput").focus(),
+        () =>
+          $("#pinInput").focus(),
         50
       );
 
@@ -703,7 +883,9 @@
   }
 
 
-  async function verifyPin(event) {
+  async function verifyPin(
+    event
+  ) {
 
     event.preventDefault();
 
@@ -756,6 +938,8 @@
     chooseMotivation();
 
     navigate(currentPage);
+
+    showPrivacyCard();
   }
 
 
@@ -771,8 +955,12 @@
 
     updateAuthMode();
 
-    if ($("#loginPassword")) {
-      $("#loginPassword").value = "";
+    if (
+      $("#loginPassword")
+    ) {
+
+      $("#loginPassword").value =
+        "";
     }
   }
 
@@ -787,10 +975,12 @@
 
       show("pinView");
 
-      $("#pinInput").value = "";
+      $("#pinInput").value =
+        "";
 
       setTimeout(
-        () => $("#pinInput").focus(),
+        () =>
+          $("#pinInput").focus(),
         50
       );
 
@@ -805,15 +995,41 @@
      TEMA
      ======================================================= */
 
+  function getResolvedTheme() {
+
+    const theme =
+      state.settings.theme;
+
+    if (
+      theme === "light"
+    ) {
+
+      return "light";
+    }
+
+    if (
+      theme === "dark"
+    ) {
+
+      return "dark";
+    }
+
+    return window.matchMedia &&
+      window.matchMedia(
+        "(prefers-color-scheme: light)"
+      ).matches
+      ? "light"
+      : "dark";
+  }
+
+
   function applyTheme() {
 
-    const isLight =
-      state.settings.theme === "light";
+    const resolved =
+      getResolvedTheme();
 
-    /*
-      O CSS usa body.light.
-      Mantemos também a classe no html para compatibilidade.
-    */
+    const isLight =
+      resolved === "light";
 
     document.body.classList.toggle(
       "light",
@@ -825,13 +1041,173 @@
       isLight
     );
 
+    const select =
+      $("#themeSelect");
+
+    if (select) {
+
+      select.value =
+        [
+          "system",
+          "light",
+          "dark"
+        ].includes(
+          state.settings.theme
+        )
+          ? state.settings.theme
+          : "system";
+    }
+
     const switchElement =
       $("#themeSwitch");
 
     if (switchElement) {
+
       switchElement.checked =
         isLight;
     }
+  }
+
+
+  /* =======================================================
+     PRIVACIDADE / PRIMEIRO ACESSO
+     ======================================================= */
+
+  function showPrivacyCard() {
+
+    if (
+      state.settings.privacyDismissed
+    ) {
+      return;
+    }
+
+    if (
+      document.querySelector(
+        "#privacyFirstAccess"
+      )
+    ) {
+      return;
+    }
+
+    const card =
+      document.createElement(
+        "aside"
+      );
+
+    card.id =
+      "privacyFirstAccess";
+
+    card.className =
+      "privacy-first-access";
+
+    card.innerHTML = `
+      <div class="privacy-first-access-inner">
+
+        <img
+          src="logo-192.png"
+          alt=""
+          class="privacy-first-access-logo"
+        >
+
+        <div class="privacy-first-access-content">
+
+          <span class="privacy-kicker">
+            PRIVACIDADE DO SANTINHO
+          </span>
+
+          <h2>
+            Seus dados financeiros ficam neste aparelho.
+          </h2>
+
+          <p>
+            O Santinho Finance funciona localmente.
+            Suas transações, metas e configurações são
+            armazenadas no navegador deste dispositivo
+            usando armazenamento local.
+          </p>
+
+          <p>
+            O aplicativo não possui banco de dados
+            financeiro centralizado nem envia suas
+            movimentações para um servidor.
+          </p>
+
+          <p>
+            Por segurança, mantenha seus backups em um
+            local confiável. Se o armazenamento do navegador
+            for apagado, os dados locais podem ser perdidos.
+          </p>
+
+          <label class="privacy-check">
+            <input
+              id="privacyDontShow"
+              type="checkbox"
+            >
+
+            <span>
+              Não mostrar novamente
+            </span>
+          </label>
+
+          <button
+            id="privacyContinue"
+            class="btn primary"
+            type="button"
+          >
+            Entendi
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+    document.body.appendChild(
+      card
+    );
+
+    requestAnimationFrame(() => {
+
+      card.classList.add(
+        "visible"
+      );
+    });
+
+    $("#privacyContinue")?.addEventListener(
+      "click",
+      () => {
+
+        const dontShow =
+          $("#privacyDontShow")
+            ?.checked;
+
+        if (dontShow) {
+
+          state.settings.privacyDismissed =
+            true;
+
+          try {
+
+            localStorage.setItem(
+              "santinho-privacy-dismissed-v1",
+              "1"
+            );
+
+          } catch {}
+
+          saveState();
+        }
+
+        card.classList.remove(
+          "visible"
+        );
+
+        setTimeout(
+          () => card.remove(),
+          220
+        );
+      }
+    );
   }
 
 
@@ -852,10 +1228,13 @@
     if (
       !validPages.includes(page)
     ) {
-      page = "dashboard";
+
+      page =
+        "dashboard";
     }
 
-    currentPage = page;
+    currentPage =
+      page;
 
     $$(".page").forEach(
       section => {
@@ -872,7 +1251,8 @@
       button => {
 
         const active =
-          button.dataset.nav === page;
+          button.dataset.nav ===
+          page;
 
         button.classList.toggle(
           "active",
@@ -895,27 +1275,39 @@
       }
     );
 
-    /*
-      Atualiza a página aberta.
-    */
 
-    if (page === "dashboard") {
+    if (
+      page === "dashboard"
+    ) {
+
       renderDashboard();
     }
 
-    if (page === "analysis") {
+    if (
+      page === "analysis"
+    ) {
+
       renderAnalysis();
     }
 
-    if (page === "transactions") {
+    if (
+      page === "transactions"
+    ) {
+
       renderTransactions();
     }
 
-    if (page === "goals") {
+    if (
+      page === "goals"
+    ) {
+
       renderGoals();
     }
 
-    if (page === "profile") {
+    if (
+      page === "profile"
+    ) {
+
       renderProfile();
     }
 
@@ -937,7 +1329,8 @@
 
     const choices =
       MOTIVATIONS.filter(
-        phrase => phrase !== last
+        phrase =>
+          phrase !== last
       );
 
     const phrase =
@@ -958,6 +1351,7 @@
       $("#motivation");
 
     if (element) {
+
       element.textContent =
         phrase;
     }
@@ -973,6 +1367,7 @@
   function parseDate(value) {
 
     if (!value) {
+
       return new Date();
     }
 
@@ -1059,10 +1454,12 @@
      TRANSAÇÕES
      ======================================================= */
 
-  function transactionAmount(transaction) {
+  function transactionAmount(
+    transaction
+  ) {
 
     const amount =
-      Number(
+      parseBRL(
         transaction?.amount
       );
 
@@ -1079,6 +1476,9 @@
 
     return state.transactions.filter(
       transaction =>
+        isTransactionEffective(
+          transaction
+        ) &&
         monthKey(
           transaction.date
         ) === key
@@ -1123,10 +1523,14 @@
         );
 
     return {
+
       income,
+
       expense,
+
       balance:
-        income - expense
+        income -
+        expense
     };
   }
 
@@ -1159,37 +1563,51 @@
     }
 
 
-    if ($("#balanceValue")) {
+    if (
+      $("#balanceValue")
+    ) {
 
       $("#balanceValue")
         .textContent =
         balanceVisible
-          ? money(totals.balance)
+          ? money(
+              totals.balance
+            )
           : "••••••";
     }
 
 
-    if ($("#incomeMonth")) {
+    if (
+      $("#incomeMonth")
+    ) {
 
       $("#incomeMonth")
         .textContent =
         balanceVisible
-          ? money(totals.income)
+          ? money(
+              totals.income
+            )
           : "••••";
     }
 
 
-    if ($("#expenseMonth")) {
+    if (
+      $("#expenseMonth")
+    ) {
 
       $("#expenseMonth")
         .textContent =
         balanceVisible
-          ? money(totals.expense)
+          ? money(
+              totals.expense
+            )
           : "••••";
     }
 
 
-    if ($("#dashboardAvatar")) {
+    if (
+      $("#dashboardAvatar")
+    ) {
 
       $("#dashboardAvatar").src =
         state.profile.avatar ||
@@ -1202,6 +1620,12 @@
 
     const recent =
       [...state.transactions]
+        .filter(
+          transaction =>
+            isTransactionEffective(
+              transaction
+            )
+        )
         .sort(
           (a, b) =>
             parseDate(b.date) -
@@ -1402,17 +1826,26 @@
             "income";
 
           const sign =
-            income ? "+" : "−";
+            income
+              ? "+"
+              : "−";
 
           const description =
             transaction.description ||
-            (income
-              ? "Entrada"
-              : "Despesa");
+            (
+              income
+                ? "Entrada"
+                : "Despesa"
+            );
 
           const category =
             transaction.category ||
             "Outros";
+
+          const scheduled =
+            isFutureTransaction(
+              transaction
+            );
 
           return `
             <article
@@ -1444,6 +1877,12 @@
                   ).toLocaleDateString(
                     "pt-BR"
                   )}
+
+                  ${
+                    scheduled
+                      ? " · Programada"
+                      : ""
+                  }
                 </small>
 
               </div>
@@ -1507,7 +1946,8 @@
 
     const type =
       $("#transactionType")
-        ?.value || "all";
+        ?.value ||
+      "all";
 
 
     const filtered =
@@ -1603,7 +2043,8 @@
     const previous =
       Number(
         select.value
-      ) || currentYear();
+      ) ||
+      currentYear();
 
     select.innerHTML =
       years
@@ -1617,7 +2058,9 @@
         .join("");
 
     select.value =
-      years.includes(previous)
+      years.includes(
+        previous
+      )
         ? String(previous)
         : String(years[0]);
   }
@@ -1629,6 +2072,9 @@
 
     return state.transactions.filter(
       transaction =>
+        isTransactionEffective(
+          transaction
+        ) &&
         parseDate(
           transaction.date
         ).getFullYear() ===
@@ -1685,15 +2131,24 @@
     const year =
       Number(
         select?.value
-      ) || currentYear();
+      ) ||
+      currentYear();
 
-    renderAnalysisSummary(year);
+    renderAnalysisSummary(
+      year
+    );
 
-    renderYearlyChart(year);
+    renderYearlyChart(
+      year
+    );
 
-    renderYearlyCategories(year);
+    renderYearlyCategories(
+      year
+    );
 
-    renderIncomeExpenseChart(year);
+    renderIncomeExpenseChart(
+      year
+    );
   }
 
 
@@ -1702,7 +2157,9 @@
   ) {
 
     const transactions =
-      getYearTransactions(year);
+      getYearTransactions(
+        year
+      );
 
     const totals =
       totalsForTransactions(
@@ -1710,7 +2167,9 @@
       );
 
     const monthly =
-      getMonthlyExpenses(year);
+      getMonthlyExpenses(
+        year
+      );
 
     const totalExpense =
       totals.expense;
@@ -1719,15 +2178,21 @@
       totalExpense / 12;
 
 
-    if ($("#analysisYearExpense")) {
+    if (
+      $("#analysisYearExpense")
+    ) {
 
       $("#analysisYearExpense")
         .textContent =
-        money(totalExpense);
+        money(
+          totalExpense
+        );
     }
 
 
-    if ($("#analysisYearLabel")) {
+    if (
+      $("#analysisYearLabel")
+    ) {
 
       $("#analysisYearLabel")
         .textContent =
@@ -1735,65 +2200,95 @@
     }
 
 
-    if ($("#analysisIncome")) {
+    if (
+      $("#analysisIncome")
+    ) {
 
       $("#analysisIncome")
         .textContent =
-        money(totals.income);
+        money(
+          totals.income
+        );
     }
 
 
-    if ($("#analysisExpense")) {
+    if (
+      $("#analysisExpense")
+    ) {
 
       $("#analysisExpense")
         .textContent =
-        money(totals.expense);
+        money(
+          totals.expense
+        );
     }
 
 
-    if ($("#analysisBalance")) {
+    if (
+      $("#analysisBalance")
+    ) {
 
       $("#analysisBalance")
         .textContent =
-        money(totals.balance);
+        money(
+          totals.balance
+        );
     }
 
 
-    if ($("#analysisAverage")) {
+    if (
+      $("#analysisAverage")
+    ) {
 
       $("#analysisAverage")
         .textContent =
-        money(average);
+        money(
+          average
+        );
     }
 
 
     const highest =
-      Math.max(...monthly);
+      Math.max(
+        ...monthly
+      );
 
     const lowest =
-      Math.min(...monthly);
+      Math.min(
+        ...monthly
+      );
 
     const highestIndex =
-      monthly.indexOf(highest);
+      monthly.indexOf(
+        highest
+      );
 
     const lowestIndex =
-      monthly.indexOf(lowest);
+      monthly.indexOf(
+        lowest
+      );
 
     const months =
       fullMonthNames();
 
 
-    if ($("#highestExpenseMonth")) {
+    if (
+      $("#highestExpenseMonth")
+    ) {
 
       $("#highestExpenseMonth")
         .textContent =
         highest > 0
-          ? months[highestIndex]
+          ? months[
+              highestIndex
+            ]
           : "—";
     }
 
 
-    if ($("#highestExpenseMonthValue")) {
+    if (
+      $("#highestExpenseMonthValue")
+    ) {
 
       $("#highestExpenseMonthValue")
         .textContent =
@@ -1803,17 +2298,23 @@
     }
 
 
-    if ($("#lowestExpenseMonth")) {
+    if (
+      $("#lowestExpenseMonth")
+    ) {
 
       $("#lowestExpenseMonth")
         .textContent =
         lowest > 0
-          ? months[lowestIndex]
+          ? months[
+              lowestIndex
+            ]
           : "Sem gastos";
     }
 
 
-    if ($("#lowestExpenseMonthValue")) {
+    if (
+      $("#lowestExpenseMonthValue")
+    ) {
 
       $("#lowestExpenseMonthValue")
         .textContent =
@@ -1828,7 +2329,9 @@
      GRÁFICO DE BARRAS
      ======================================================= */
 
-  function renderYearlyChart(year) {
+  function renderYearlyChart(
+    year
+  ) {
 
     const root =
       $("#yearlyExpenseChart");
@@ -1836,10 +2339,15 @@
     if (!root) return;
 
     const values =
-      getMonthlyExpenses(year);
+      getMonthlyExpenses(
+        year
+      );
 
     const max =
-      Math.max(...values, 1);
+      Math.max(
+        ...values,
+        1
+      );
 
     const months =
       monthNames();
@@ -1854,8 +2362,11 @@
               value > 0
                 ? Math.max(
                     3,
-                    (value / max) *
-                      100
+                    (
+                      value /
+                      max
+                    ) *
+                    100
                   )
                 : 2;
 
@@ -1866,9 +2377,11 @@
               >
 
                 <div class="year-month-value">
-                  ${value > 0
-                    ? money(value)
-                    : ""}
+                  ${
+                    value > 0
+                      ? money(value)
+                      : ""
+                  }
                 </div>
 
                 <div class="year-month-bar-wrap">
@@ -1909,7 +2422,9 @@
     if (!root) return;
 
     const transactions =
-      getYearTransactions(year);
+      getYearTransactions(
+        year
+      );
 
     const categoryTotals =
       getCategoryTotals(
@@ -1966,8 +2481,11 @@
             const percentage =
               total > 0
                 ? Math.round(
-                    (value / total) *
-                      100
+                    (
+                      value /
+                      total
+                    ) *
+                    100
                   )
                 : 0;
 
@@ -2023,7 +2541,9 @@
 
     const totals =
       totalsForTransactions(
-        getYearTransactions(year)
+        getYearTransactions(
+          year
+        )
       );
 
     const maximum =
@@ -2035,12 +2555,16 @@
 
 
     const incomeWidth =
-      (totals.income / maximum) *
-      100;
+      (
+        totals.income /
+        maximum
+      ) * 100;
 
     const expenseWidth =
-      (totals.expense / maximum) *
-      100;
+      (
+        totals.expense /
+        maximum
+      ) * 100;
 
 
     root.innerHTML = `
@@ -2054,7 +2578,9 @@
           </span>
 
           <strong>
-            ${money(totals.income)}
+            ${money(
+              totals.income
+            )}
           </strong>
 
         </div>
@@ -2082,7 +2608,9 @@
           </span>
 
           <strong>
-            ${money(totals.expense)}
+            ${money(
+              totals.expense
+            )}
           </strong>
 
         </div>
@@ -2101,9 +2629,7 @@
       </div>
     `;
   }
-
-
-  /* =======================================================
+    /* =======================================================
      METAS
      ======================================================= */
 
@@ -2144,16 +2670,15 @@
         .map(goal => {
 
           const target =
-            Number(goal.target) || 0;
+            parseBRL(goal.target) || 0;
 
           const current =
-            Number(goal.current) || 0;
+            parseBRL(goal.current) || 0;
 
           const percentage =
             target > 0
               ? clamp(
-                  (current / target) *
-                    100,
+                  (current / target) * 100,
                   0,
                   100
                 )
@@ -2471,6 +2996,187 @@
 
 
   /* =======================================================
+     RECORRÊNCIA
+     ======================================================= */
+
+  function addDays(
+    date,
+    days
+  ) {
+
+    const result =
+      new Date(date);
+
+    result.setDate(
+      result.getDate() + days
+    );
+
+    return result;
+  }
+
+
+  function addMonthsKeepingDay(
+    date,
+    months
+  ) {
+
+    const originalDay =
+      date.getDate();
+
+    const result =
+      new Date(date);
+
+    result.setDate(1);
+
+    result.setMonth(
+      result.getMonth() + months
+    );
+
+    const lastDay =
+      new Date(
+        result.getFullYear(),
+        result.getMonth() + 1,
+        0
+      ).getDate();
+
+    result.setDate(
+      Math.min(
+        originalDay,
+        lastDay
+      )
+    );
+
+    return result;
+  }
+
+
+  function dateToKey(date) {
+
+    const year =
+      date.getFullYear();
+
+    const month =
+      String(
+        date.getMonth() + 1
+      ).padStart(2, "0");
+
+    const day =
+      String(
+        date.getDate()
+      ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
+
+  function generateRecurringDates(
+    startDate,
+    recurrence,
+    endDate
+  ) {
+
+    const dates = [];
+
+    const start =
+      new Date(
+        `${startDate}T12:00:00`
+      );
+
+    if (
+      Number.isNaN(
+        start.getTime()
+      )
+    ) {
+      return dates;
+    }
+
+    let current =
+      new Date(start);
+
+    const limit =
+      endDate
+        ? new Date(
+            `${endDate}T12:00:00`
+          )
+        : null;
+
+    let guard = 0;
+
+    while (
+      current &&
+      guard < 1000
+    ) {
+
+      if (
+        limit &&
+        current > limit
+      ) {
+        break;
+      }
+
+      dates.push(
+        dateToKey(current)
+      );
+
+      if (
+        recurrence === "none"
+      ) {
+        break;
+      }
+
+      if (
+        recurrence === "daily"
+      ) {
+
+        current =
+          addDays(
+            current,
+            1
+          );
+
+      } else if (
+        recurrence === "weekly"
+      ) {
+
+        current =
+          addDays(
+            current,
+            7
+          );
+
+      } else if (
+        recurrence === "biweekly"
+      ) {
+
+        current =
+          addDays(
+            current,
+            14
+          );
+
+      } else if (
+        recurrence === "monthly"
+      ) {
+
+        current =
+          addMonthsKeepingDay(
+            current,
+            1
+          );
+
+      } else {
+
+        break;
+      }
+
+      guard++;
+    }
+
+    return dates;
+  }
+
+
+  /* =======================================================
      TRANSAÇÃO — MODAL
      ======================================================= */
 
@@ -2494,9 +3200,7 @@
 
 
     const today =
-      new Date()
-        .toISOString()
-        .slice(0, 10);
+      todayKey();
 
 
     openModal(
@@ -2532,12 +3236,16 @@
           <input
             name="amount"
             inputmode="decimal"
-            type="number"
-            min="0.01"
-            step="0.01"
+            type="text"
+            autocomplete="off"
             required
             placeholder="0,00"
           >
+
+          <small class="muted">
+            Você pode usar formatos como
+            0,90 · 10,50 · 1.234,56
+          </small>
 
         </label>
 
@@ -2584,6 +3292,61 @@
 
         <label>
 
+          Repetição
+
+          <select
+            name="recurrence"
+            id="transactionRecurrence"
+          >
+
+            <option value="none">
+              Não repetir
+            </option>
+
+            <option value="daily">
+              Diariamente
+            </option>
+
+            <option value="weekly">
+              Semanalmente
+            </option>
+
+            <option value="biweekly">
+              A cada 15 dias
+            </option>
+
+            <option value="monthly">
+              Mensalmente
+            </option>
+
+          </select>
+
+        </label>
+
+
+        <label
+          id="recurrenceEndWrap"
+          class="hidden"
+        >
+
+          Repetir até
+
+          <input
+            name="recurrenceEnd"
+            id="recurrenceEnd"
+            type="date"
+            min="${today}"
+          >
+
+          <small class="muted">
+            A última ocorrência será criada nessa data.
+          </small>
+
+        </label>
+
+
+        <label>
+
           Observação
 
           <textarea
@@ -2603,7 +3366,7 @@
       async formData => {
 
         const amount =
-          Number(
+          parseBRL(
             formData.get("amount")
           );
 
@@ -2634,37 +3397,126 @@
         }
 
 
-        state.transactions.push({
+        const date =
+          String(
+            formData.get(
+              "date"
+            ) || today
+          );
 
-          id: uid("tx"),
 
-          type,
+        const recurrence =
+          String(
+            formData.get(
+              "recurrence"
+            ) || "none"
+          );
 
-          description,
 
-          amount,
+        const recurrenceEnd =
+          String(
+            formData.get(
+              "recurrenceEnd"
+            ) || ""
+          );
 
-          category:
-            String(
-              formData.get(
-                "category"
-              ) || "Outros"
-            ),
 
-          date:
-            String(
-              formData.get(
-                "date"
-              ) || today
-            ),
+        if (
+          recurrence !== "none" &&
+          !recurrenceEnd
+        ) {
 
-          note:
-            String(
-              formData.get(
-                "note"
-              ) || ""
-            ).trim()
-        });
+          return toast(
+            "Informe a data final da repetição."
+          );
+        }
+
+
+        if (
+          recurrenceEnd &&
+          recurrenceEnd < date
+        ) {
+
+          return toast(
+            "A data final não pode ser anterior à data inicial."
+          );
+        }
+
+
+        const dates =
+          generateRecurringDates(
+            date,
+            recurrence,
+            recurrenceEnd
+          );
+
+
+        if (!dates.length) {
+
+          return toast(
+            "Não foi possível criar a transação."
+          );
+        }
+
+
+        const recurrenceGroupId =
+          recurrence !== "none"
+            ? uid("recurrence")
+            : null;
+
+
+        const category =
+          String(
+            formData.get(
+              "category"
+            ) || "Outros"
+          );
+
+
+        const note =
+          String(
+            formData.get(
+              "note"
+            ) || ""
+          ).trim();
+
+
+        dates.forEach(
+          occurrenceDate => {
+
+            state.transactions.push({
+
+              id:
+                uid("tx"),
+
+              type,
+
+              description,
+
+              amount,
+
+              category,
+
+              date:
+                occurrenceDate,
+
+              note,
+
+              recurrence,
+
+              recurrenceEnd:
+                recurrenceEnd ||
+                null,
+
+              recurrenceGroupId,
+
+              scheduled:
+                occurrenceDate >
+                todayKey()
+
+            });
+          }
+        );
 
 
         saveState();
@@ -2677,16 +3529,75 @@
           currentPage ===
           "analysis"
         ) {
+
           renderAnalysis();
         }
 
-        toast(
-          type === "income"
-            ? "Renda adicionada!"
-            : "Despesa adicionada!"
-        );
+
+        const occurrenceCount =
+          dates.length;
+
+
+        if (
+          occurrenceCount > 1
+        ) {
+
+          toast(
+            `${occurrenceCount} ocorrências criadas.`
+          );
+
+        } else {
+
+          toast(
+            type === "income"
+              ? "Renda adicionada!"
+              : "Despesa adicionada!"
+          );
+        }
       }
     );
+
+
+    const recurrenceSelect =
+      $("#transactionRecurrence");
+
+    const recurrenceEndWrap =
+      $("#recurrenceEndWrap");
+
+    const recurrenceEnd =
+      $("#recurrenceEnd");
+
+
+    if (
+      recurrenceSelect &&
+      recurrenceEndWrap
+    ) {
+
+      const updateRecurrenceUI =
+        () => {
+
+          const active =
+            recurrenceSelect.value !==
+            "none";
+
+          recurrenceEndWrap.classList.toggle(
+            "hidden",
+            !active
+          );
+
+          if (recurrenceEnd) {
+
+            recurrenceEnd.required =
+              active;
+          }
+        };
+
+
+      recurrenceSelect.onchange =
+        updateRecurrenceUI;
+
+      updateRecurrenceUI();
+    }
   }
 
 
@@ -2725,9 +3636,8 @@
 
             <input
               name="add"
-              type="number"
-              min="0.01"
-              step="0.01"
+              inputmode="decimal"
+              type="text"
               required
               placeholder="0,00"
             >
@@ -2739,8 +3649,10 @@
         async formData => {
 
           const add =
-            Number(
-              formData.get("add")
+            parseBRL(
+              formData.get(
+                "add"
+              )
             );
 
           if (
@@ -2756,7 +3668,7 @@
 
           existing.current =
             (
-              Number(
+              parseBRL(
                 existing.current
               ) || 0
             ) + add;
@@ -2804,9 +3716,8 @@
 
           <input
             name="target"
-            type="number"
-            min="0.01"
-            step="0.01"
+            inputmode="decimal"
+            type="text"
             required
             placeholder="0,00"
           >
@@ -2820,10 +3731,10 @@
 
           <input
             name="current"
-            type="number"
-            min="0"
-            step="0.01"
+            inputmode="decimal"
+            type="text"
             value="0"
+            placeholder="0,00"
           >
 
         </label>
@@ -2851,14 +3762,17 @@
           ).trim();
 
         const target =
-          Number(
-            formData.get("target")
+          parseBRL(
+            formData.get(
+              "target"
+            )
           );
 
         const current =
-          Number(
-            formData.get("current") ||
-            0
+          parseBRL(
+            formData.get(
+              "current"
+            ) || 0
           );
 
 
@@ -2883,7 +3797,8 @@
 
         state.goals.push({
 
-          id: uid("goal"),
+          id:
+            uid("goal"),
 
           name,
 
@@ -2892,7 +3807,11 @@
           current:
             Math.max(
               0,
-              current
+              Number.isFinite(
+                current
+              )
+                ? current
+                : 0
             ),
 
           deadline:
@@ -3264,7 +4183,9 @@
         rememberBackup();
 
 
-        if ($("#backupStatus")) {
+        if (
+          $("#backupStatus")
+        ) {
 
           $("#backupStatus")
             .textContent =
@@ -3284,7 +4205,8 @@
             "a"
           );
 
-        link.href = url;
+        link.href =
+          url;
 
         link.download =
           file.name;
@@ -3310,7 +4232,9 @@
         rememberBackup();
 
 
-        if ($("#backupStatus")) {
+        if (
+          $("#backupStatus")
+        ) {
 
           $("#backupStatus")
             .textContent =
@@ -3325,7 +4249,9 @@
         "AbortError"
       ) {
 
-        if ($("#backupStatus")) {
+        if (
+          $("#backupStatus")
+        ) {
 
           $("#backupStatus")
             .textContent =
@@ -3334,7 +4260,9 @@
 
       } else {
 
-        if ($("#backupStatus")) {
+        if (
+          $("#backupStatus")
+        ) {
 
           $("#backupStatus")
             .textContent =
@@ -3434,7 +4362,9 @@
       renderAnalysis();
 
 
-      if ($("#backupStatus")) {
+      if (
+        $("#backupStatus")
+      ) {
 
         $("#backupStatus")
           .textContent =
@@ -3448,7 +4378,9 @@
 
     } catch {
 
-      if ($("#backupStatus")) {
+      if (
+        $("#backupStatus")
+      ) {
 
         $("#backupStatus")
           .textContent =
@@ -3457,7 +4389,9 @@
     }
 
 
-    if ($("#restoreInput")) {
+    if (
+      $("#restoreInput")
+    ) {
 
       $("#restoreInput").value =
         "";
@@ -3663,12 +4597,6 @@
         );
 
 
-    /*
-      Também permite que o botão
-      "Ver análise" do dashboard
-      navegue para a nova página.
-    */
-
     $$("[data-nav]").forEach(
       element => {
 
@@ -3752,22 +4680,117 @@
        TEMA
        ----------------------------------------------------- */
 
-    $("#themeSwitch").onchange =
-      event => {
+    const themeSelect =
+      $("#themeSelect");
 
-        state.settings.theme =
-          event.target.checked
-            ? "light"
-            : "dark";
 
-        saveState();
+    if (themeSelect) {
 
-        applyTheme();
+      themeSelect.onchange =
+        event => {
 
-        toast(
-          "Tema atualizado."
+          const value =
+            [
+              "system",
+              "light",
+              "dark"
+            ].includes(
+              event.target.value
+            )
+              ? event.target.value
+              : "system";
+
+
+          state.settings.theme =
+            value;
+
+
+          saveState();
+
+          applyTheme();
+
+          toast(
+            "Tema atualizado."
+          );
+        };
+
+    } else {
+
+      /*
+        Compatibilidade com o
+        seletor antigo.
+      */
+
+      const themeSwitch =
+        $("#themeSwitch");
+
+      if (themeSwitch) {
+
+        themeSwitch.onchange =
+          event => {
+
+            state.settings.theme =
+              event.target.checked
+                ? "light"
+                : "dark";
+
+            saveState();
+
+            applyTheme();
+
+            toast(
+              "Tema atualizado."
+            );
+          };
+      }
+    }
+
+
+    /* -----------------------------------------------------
+       SISTEMA DE TEMA
+       ----------------------------------------------------- */
+
+    if (
+      window.matchMedia
+    ) {
+
+      const mediaQuery =
+        window.matchMedia(
+          "(prefers-color-scheme: light)"
         );
-      };
+
+
+      const handleSystemTheme =
+        () => {
+
+          if (
+            state.settings.theme ===
+            "system"
+          ) {
+
+            applyTheme();
+          }
+        };
+
+
+      if (
+        mediaQuery.addEventListener
+      ) {
+
+        mediaQuery.addEventListener(
+          "change",
+          handleSystemTheme
+        );
+
+      } else if (
+        mediaQuery.addListener
+      ) {
+
+        mediaQuery.addListener(
+          handleSystemTheme
+        );
+      }
+    }
 
 
     /* -----------------------------------------------------
@@ -4110,6 +5133,26 @@
 
 
     /*
+      Compatibilidade com a opção
+      de privacidade salva anteriormente.
+    */
+
+    try {
+
+      if (
+        localStorage.getItem(
+          "santinho-privacy-dismissed-v1"
+        ) === "1"
+      ) {
+
+        state.settings.privacyDismissed =
+          true;
+      }
+
+    } catch {}
+
+
+    /*
       Configura login/criação
       de conta.
     */
@@ -4131,7 +5174,9 @@
       mostra criação.
     */
 
-    if (!state.credentials) {
+    if (
+      !state.credentials
+    ) {
 
       $("#loginForm")
         .classList
@@ -4150,6 +5195,14 @@
     */
 
     setupAnalysisYears();
+
+
+    /*
+      Aplica o tema correto
+      depois de carregar os dados.
+    */
+
+    applyTheme();
 
 
     /*
