@@ -8,13 +8,26 @@
     content="width=device-width, initial-scale=1, viewport-fit=cover"
   >
 
-  <meta name="theme-color" content="#07110c">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    name="theme-color"
+    content="#07110c"
+  >
+
+  <meta
+    name="mobile-web-app-capable"
+    content="yes"
+  >
+
+  <meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+  >
+
   <meta
     name="apple-mobile-web-app-status-bar-style"
     content="black-translucent"
   >
+
   <meta
     name="apple-mobile-web-app-title"
     content="Santinho Finance"
@@ -25,28 +38,41 @@
     content="Santinho Finance — controle financeiro local, privado e pessoal."
   >
 
-  <meta name="color-scheme" content="dark light">
+  <meta
+    name="color-scheme"
+    content="dark light"
+  >
 
   <meta
     http-equiv="Content-Security-Policy"
     content="default-src 'self'; img-src 'self' data: blob:; style-src 'self'; script-src 'self'; connect-src 'none'; font-src 'self'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';"
   >
 
-  <link rel="manifest" href="manifest.json">
+  <!-- PWA -->
+  <link
+    rel="manifest"
+    href="manifest.json"
+  >
 
+  <!-- Ícone padrão -->
   <link
     rel="icon"
     href="logo-192.png"
     type="image/png"
   >
 
+  <!-- Ícone usado pelo iPhone ao adicionar à Tela de Início -->
   <link
     rel="apple-touch-icon"
     sizes="180x180"
     href="apple-touch-icon.png"
   >
 
-  <link rel="stylesheet" href="style.css">
+  <!-- CSS -->
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 
   <title>Santinho Finance</title>
 </head>
@@ -109,6 +135,7 @@
             >
           </label>
 
+
           <label>
             Senha
 
@@ -121,6 +148,7 @@
               minlength="6"
             >
           </label>
+
 
           <button
             class="btn btn-primary btn-arte"
@@ -152,6 +180,7 @@
             >
           </label>
 
+
           <label>
             E-mail
 
@@ -163,6 +192,7 @@
               maxlength="120"
             >
           </label>
+
 
           <label>
             Senha
@@ -177,6 +207,7 @@
             >
           </label>
 
+
           <label>
             Confirmar senha
 
@@ -189,6 +220,7 @@
               minlength="6"
             >
           </label>
+
 
           <button
             class="btn btn-primary btn-arte"
@@ -207,6 +239,7 @@
         >
           Primeiro acesso? Criar conta local
         </button>
+
 
         <div
           id="authMessage"
@@ -250,6 +283,7 @@
           O PIN protege o acesso ao aplicativo neste aparelho.
         </p>
 
+
         <form
           id="pinForm"
           class="form-stack"
@@ -268,6 +302,7 @@
             required
           >
 
+
           <button
             class="btn btn-primary"
             type="submit"
@@ -277,6 +312,7 @@
 
         </form>
 
+
         <button
           id="logoutFromPin"
           class="link-btn"
@@ -284,6 +320,7 @@
         >
           Sair da conta
         </button>
+
 
         <div
           id="pinMessage"
@@ -383,6 +420,7 @@
 
             </div>
 
+
             <img
               id="dashboardAvatar"
               class="avatar"
@@ -436,6 +474,7 @@
 
               </div>
 
+
               <button
                 id="toggleBalance"
                 class="ghost-btn"
@@ -461,6 +500,7 @@
                 </b>
 
               </div>
+
 
               <div>
 
@@ -551,6 +591,7 @@
 
             </div>
 
+
             <button
               class="link-btn"
               type="button"
@@ -618,6 +659,7 @@
 
             </div>
 
+
             <select
               id="analysisYear"
               class="year-select"
@@ -626,8 +668,6 @@
 
           </div>
 
-
-          <!-- TOTAL DO ANO -->
 
           <article class="analysis-hero glass">
 
@@ -643,6 +683,7 @@
 
             </div>
 
+
             <span
               id="analysisYearLabel"
               class="analysis-year-label"
@@ -652,8 +693,6 @@
 
           </article>
 
-
-          <!-- RESUMO ANUAL -->
 
           <div class="analysis-summary-grid">
 
@@ -711,8 +750,6 @@
           </div>
 
 
-          <!-- BARRAS MENSAIS -->
-
           <article class="analysis-card glass">
 
             <div class="section-head">
@@ -740,8 +777,6 @@
 
           </article>
 
-
-          <!-- INDICADORES -->
 
           <div class="analysis-insights">
 
@@ -781,8 +816,6 @@
           </div>
 
 
-          <!-- CATEGORIAS DO ANO -->
-
           <article class="analysis-card glass">
 
             <div class="section-head">
@@ -809,8 +842,6 @@
 
           </article>
 
-
-          <!-- COMPARAÇÃO -->
 
           <article class="analysis-card glass">
 
@@ -864,6 +895,7 @@
 
             </div>
 
+
             <button
               id="addTransactionTop"
               class="btn btn-primary btn-small"
@@ -883,6 +915,7 @@
               placeholder="Buscar descrição ou categoria..."
               aria-label="Buscar transações"
             >
+
 
             <select id="transactionType">
 
@@ -933,6 +966,7 @@
               </h2>
 
             </div>
+
 
             <button
               id="addGoal"
@@ -992,6 +1026,7 @@
                 alt="Foto de perfil"
               >
 
+
               <label
                 class="photo-edit"
                 for="profilePhoto"
@@ -1020,7 +1055,6 @@
                   id="profileUsername"
                   maxlength="40"
                 >
-
               </label>
 
 
@@ -1032,7 +1066,6 @@
                   type="email"
                   maxlength="120"
                 >
-
               </label>
 
 
@@ -1053,34 +1086,47 @@
 
           <article class="settings-card glass">
 
+            <!-- TEMA -->
+
             <div class="setting-row">
 
               <div>
 
                 <b>
-                  Modo escuro
+                  Tema
                 </b>
 
                 <small>
-                  Preferência salva somente neste aparelho.
+                  Escolha como o aplicativo deve aparecer.
                 </small>
 
               </div>
 
 
-              <label class="switch">
+              <select
+                id="themeSelect"
+                class="theme-select"
+                aria-label="Selecionar tema"
+              >
 
-                <input
-                  id="themeSwitch"
-                  type="checkbox"
-                >
+                <option value="system">
+                  Dispositivo
+                </option>
 
-                <span></span>
+                <option value="light">
+                  Claro
+                </option>
 
-              </label>
+                <option value="dark">
+                  Escuro
+                </option>
+
+              </select>
 
             </div>
 
+
+            <!-- PIN -->
 
             <div class="setting-row">
 
@@ -1110,7 +1156,9 @@
           </article>
 
 
-          <!-- BACKUP -->
+          <!-- =================================================
+               BACKUP
+               ================================================= -->
 
           <article class="backup-card glass">
 
@@ -1209,6 +1257,7 @@
             <p class="eyebrow">
               SESSÃO
             </p>
+
 
             <button
               id="logout"
