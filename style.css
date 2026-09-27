@@ -2133,86 +2133,71 @@ select {
 
 }
 /* =========================================================
-   CORREÇÃO DEFINITIVA — INPUTS DO MODAL NO IPHONE
+   CORREÇÃO IPHONE — CAMPOS DE DATA DOS MODAIS
    ========================================================= */
 
-#modalRoot {
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden;
+#modalRoot .form-stack label:has(input[type="date"]) {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
 }
 
-#modalRoot .modal {
-  width: min(100%, 500px);
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-  overflow-x: hidden;
+#modalRoot .form-stack input[type="date"] {
+  display: block !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+
+  inline-size: 100% !important;
+  max-inline-size: 100% !important;
+  min-inline-size: 0 !important;
+
+  box-sizing: border-box !important;
+
+  margin: 0 !important;
+
+  padding-left: 14px !important;
+  padding-right: 10px !important;
+
+  overflow: hidden !important;
+
+  -webkit-appearance: none !important;
+  appearance: none !important;
 }
 
-#modalRoot #modalForm {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
+/* Área interna usada pelo Safari para mostrar a data */
+#modalRoot .form-stack input[type="date"]::-webkit-date-and-time-value {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  text-align: left !important;
 }
 
-#modalRoot #modalForm label {
-  display: grid;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
+/* Evita que os controles nativos do iPhone criem largura extra */
+#modalRoot .form-stack input[type="date"]::-webkit-calendar-picker-indicator {
+  max-width: 18px;
+  margin-left: auto;
 }
 
-#modalRoot #modalForm input,
-#modalRoot #modalForm select,
-#modalRoot #modalForm textarea {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
+/* Garante que o segundo campo de data
+   ("Repetir até") receba exatamente a mesma correção */
+#modalRoot #recurrenceEndWrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
 }
 
-/* Correção específica do calendário do Safari/iPhone */
-#modalRoot #modalForm input[type="date"] {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-
-  display: block;
-
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-/* Elemento interno usado pelo Safari para o valor da data */
-#modalRoot #modalForm input[type="date"]::-webkit-date-and-time-value {
-  width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-}
-
-/* Impede qualquer elemento filho de criar uma
-   largura maior que o modal */
-#modalRoot #modalForm > *,
-#modalRoot #modalForm label > * {
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-}
-
-/* Mantém os botões dentro do modal */
-#modalRoot .modal-actions {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-}
-
-#modalRoot .modal-actions .btn {
-  min-width: 0;
-  max-width: 100%;
+#modalRoot #recurrenceEnd {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  inline-size: 100% !important;
+  max-inline-size: 100% !important;
+  min-inline-size: 0 !important;
+  box-sizing: border-box !important;
 }
