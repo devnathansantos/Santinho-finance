@@ -1913,3 +1913,148 @@ html[data-theme="light"] .modal {
     padding-right: max(14px, env(safe-area-inset-right));
   }
 }
+/* =========================================================
+   SANTINHO FINANCE — COMPLEMENTOS DE COMPONENTES
+   Adicionado no final para não alterar o CSS existente
+   ========================================================= */
+
+/* ---------- ESTADOS GERAIS ---------- */
+
+.empty {
+  padding: 24px 16px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.error {
+  color: var(--expense);
+}
+
+.hidden {
+  display: none !important;
+}
+
+
+/* ---------- TRANSAÇÕES ---------- */
+
+.tx-icon {
+  flex-shrink: 0;
+}
+
+.tx-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.tx-value {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+
+/* ---------- CATEGORIAS ---------- */
+
+.category-row {
+  width: 100%;
+}
+
+.category-meta {
+  width: 100%;
+}
+
+.bar {
+  width: 100%;
+}
+
+
+/* ---------- METAS ---------- */
+
+.goal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.goal-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.goal-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+
+/* ---------- FORMULÁRIOS ---------- */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.form-grid > * {
+  min-width: 0;
+}
+
+
+/* ---------- MODAIS ---------- */
+
+.modal-cancel {
+  cursor: pointer;
+}
+
+
+/* ---------- PLANEJAMENTO FUTURO ---------- */
+
+.projected-planning-line {
+  margin-top: 6px;
+  color: var(--scheduled);
+  font-size: 0.82rem;
+}
+
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .goal-head,
+  .goal-foot {
+    align-items: flex-start;
+  }
+
+  .tx-value {
+    font-size: 0.9rem;
+  }
+}
+
+
+/* ---------- ACESSIBILIDADE ---------- */
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent, #d8ff4f);
+  outline-offset: 2px;
+}
