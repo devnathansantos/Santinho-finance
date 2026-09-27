@@ -907,6 +907,8 @@
           </div>
 
 
+          <!-- FILTROS -->
+
           <div class="filters glass">
 
             <input
@@ -917,7 +919,10 @@
             >
 
 
-            <select id="transactionType">
+            <select
+              id="transactionType"
+              aria-label="Filtrar por tipo"
+            >
 
               <option value="all">
                 Todas
@@ -932,6 +937,65 @@
               </option>
 
             </select>
+
+
+            <select
+              id="transactionStatus"
+              aria-label="Filtrar por situação"
+            >
+
+              <option value="all">
+                Todas as situações
+              </option>
+
+              <option value="past">
+                Já realizadas
+              </option>
+
+              <option value="scheduled">
+                Programadas
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- LEGENDA -->
+
+          <div class="transaction-legend glass">
+
+            <div class="transaction-legend-item">
+
+              <span class="transaction-dot expense-dot"></span>
+
+              <span>
+                Gasto já realizado
+              </span>
+
+            </div>
+
+
+            <div class="transaction-legend-item">
+
+              <span class="transaction-dot income-dot"></span>
+
+              <span>
+                Renda recebida
+              </span>
+
+            </div>
+
+
+            <div class="transaction-legend-item">
+
+              <span class="transaction-dot scheduled-dot"></span>
+
+              <span>
+                Gasto programado
+              </span>
+
+            </div>
 
           </div>
 
@@ -1234,11 +1298,13 @@
               </strong>
 
               →
+
               <strong>
                 Salvar em Arquivos
               </strong>
 
               →
+
               <strong>
                 iCloud Drive
               </strong>.
