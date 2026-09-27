@@ -2132,3 +2132,49 @@ select {
   }
 
 }
+
+/* =========================================================
+   CORREÇÃO — CAMPOS DOS MODAIS NO IPHONE
+   ========================================================= */
+
+.modal,
+.modal form,
+.modal .form-stack,
+.modal .form-stack label {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.modal {
+  overflow-x: hidden;
+}
+
+.modal input,
+.modal select,
+.modal textarea {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Corrige especificamente o campo de data no Safari/iPhone */
+.modal input[type="date"] {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Evita que o conteúdo interno do formulário crie uma
+   largura maior que o modal */
+.modal form > *,
+.modal .form-stack > *,
+.modal .form-stack label > * {
+  min-width: 0;
+  max-width: 100%;
+}
