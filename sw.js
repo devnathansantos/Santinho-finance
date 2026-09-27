@@ -1,4 +1,4 @@
-const CACHE = "santinho-finance-v3";
+const CACHE = "santinho-finance-v4";
 
 const APP_SHELL = [
   "./",
@@ -6,10 +6,10 @@ const APP_SHELL = [
   "./style.css",
   "./app.js",
   "./manifest.json",
-  ".logo.png",
-  ".logo-192.png",
-  ".logo-512.png",
-  ".apple-touch-icon.png"
+  "./logo.png",
+  "./logo-192.png",
+  "./logo-512.png",
+  "./apple-touch-icon.png"
 ];
 
 self.addEventListener("install", event => {
@@ -26,7 +26,10 @@ self.addEventListener("activate", event => {
       .then(keys =>
         Promise.all(
           keys
-            .filter(key => key.startsWith("santinho-finance-") && key !== CACHE)
+            .filter(key =>
+              key.startsWith("santinho-finance-") &&
+              key !== CACHE
+            )
             .map(key => caches.delete(key))
         )
       )
@@ -35,36 +38,43 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
-  const request = event.request;
+  if (event.request.method !== "GET") return;
 
-  if (request.method !== "GET") return;
+  const url = new URL(event.request.url);
 
-  const url = new URL(request.url);
-
-  // O Santinho Finance trabalha somente com recursos do próprio domínio.
   if (url.origin !== self.location.origin) return;
 
   event.respondWith(
-    caches.match(request).then(cached => {
-      if (cached) {
-        return cached;
-      }
+    caches.match(event.request)
+      .then(cached => {
+        if (cached) return cached;
 
-      return fetch(request)
-        .then(response => {
-          if (!response || !response.ok) {
+        return fetch(event.request)
+          .then(response => {
+            if (
+              response &&
+              response.status === 200 &&
+              response.type === "basic"
+            ) {
+              const copy = response.clone();
+
+              caches.open(CACHE).then(cache => {
+                cache.put(event.request, copy);
+              });
+            }
+
             return response;
-          }
+          })
+          .catch(() => {
+            if (event.request.mode === "navigate") {
+              return caches.match("./index.html");
+            }
 
-          const copy = response.clone();
-
-          caches.open(CACHE).then(cache => {
-            cache.put(request, copy);
+            return new Response("", {
+              status: 503,
+              statusText: "Offline"
+            });
           });
-
-          return response;
-        })
-        .catch(() => caches.match("./index.html"));
-    })
+      })
   );
 });
