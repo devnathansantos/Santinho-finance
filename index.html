@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07110c">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Santinho Finance">
+  <meta name="description" content="Santinho Finance — controle financeiro local, privado e pessoal.">
+  <meta name="color-scheme" content="dark light">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self'; script-src 'self'; connect-src 'none'; font-src 'self'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="logo-192.png" type="image/png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <title>Santinho Finance</title>
+</head>
+<body>
+<div id="app">
+  <section id="authView" class="auth-shell" aria-label="Autenticação">
+    <div class="auth-card glass">
+      <img class="brand-logo" src="logo.png" alt="Santinho Finance">
+      <p class="eyebrow">100% LOCAL • PRIVADO</p>
+      <h1 id="authTitle">Entrar no Santinho Finance</h1>
+      <p id="authSubtitle" class="muted">Seus dados financeiros permanecem neste aparelho.</p>
+      <form id="loginForm" class="form-stack" autocomplete="off">
+        <label>Username ou E-mail<input id="loginIdentifier" name="identifier" autocomplete="username" required maxlength="120"></label>
+        <label>Senha<input id="loginPassword" name="password" type="password" autocomplete="current-password" required minlength="6"></label>
+        <button class="btn btn-primary btn-arte" type="submit">Entrar</button>
+      </form>
+      <form id="setupForm" class="form-stack hidden" autocomplete="off">
+        <label>Nome de usuário<input id="setupUsername" name="username" autocomplete="username" required maxlength="40"></label>
+        <label>E-mail<input id="setupEmail" name="email" type="email" autocomplete="email" maxlength="120"></label>
+        <label>Senha<input id="setupPassword" name="password" type="password" autocomplete="new-password" required minlength="6"></label>
+        <label>Confirmar senha<input id="setupPassword2" name="password2" type="password" autocomplete="new-password" required minlength="6"></label>
+        <button class="btn btn-primary btn-arte" type="submit">Criar acesso local</button>
+      </form>
+      <button id="toggleSetup" class="auth-switch-btn" type="button">Criar sua conta</button>
+      <div id="authMessage" class="status-message" role="status" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section id="pinView" class="auth-shell hidden" aria-label="PIN">
+    <div class="pin-card glass">
+      <img class="pin-logo" src="logo-192.png" alt="">
+      <p class="eyebrow">APP BLOQUEADO</p><h1>Digite seu PIN</h1>
+      <p class="muted">O PIN protege o acesso ao aplicativo neste aparelho.</p>
+      <form id="pinForm" class="form-stack"><input id="pinInput" class="pin-input" inputmode="numeric" pattern="[0-9]*" maxlength="6" minlength="4" type="password" autocomplete="one-time-code" placeholder="••••" required><button class="btn btn-primary" type="submit">Desbloquear</button></form>
+      <button id="logoutFromPin" class="link-btn" type="button">Sair da conta</button>
+      <div id="pinMessage" class="status-message" role="status" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <main id="mainView" class="app-shell hidden">
+    <header class="topbar glass">
+      <button id="mobileBrand" class="brand-mini" type="button" data-nav="dashboard" aria-label="Ir para o início"><img src="logo-192.png" alt=""><span>Santinho <b>Finance</b></span></button>
+      <div class="topbar-actions"><button id="lockNow" class="icon-btn" type="button" title="Bloquear aplicativo" aria-label="Bloquear aplicativo">🔒</button></div>
+    </header>
+
+    <div class="app-content">
+      <section id="page-dashboard" class="page active">
+        <div class="welcome-row"><div><p class="eyebrow">DASHBOARD</p><h2>Olá, <span id="welcomeName">amigo</span>! 👋</h2></div><img id="dashboardAvatar" class="avatar" src="logo-192.png" alt="Avatar"></div>
+        <article class="santinho-card glass"><img src="logo-192.png" alt="" class="santinho-face"><div><span class="eyebrow">CONSELHO DO SANTINHO</span><p id="motivation">Pequenos hábitos, grandes resultados.</p></div></article>
+        <div class="balance-card glass">
+          <div class="balance-head"><div><span class="muted">Saldo atual</span><strong id="balanceValue">R$ 0,00</strong></div><button id="toggleBalance" class="ghost-btn" type="button" aria-label="Mostrar ou esconder saldo">◉</button></div>
+          <p id="projectedPlanningLine" class="planning-line"></p>
+          <div class="balance-grid"><div><span>Entradas</span><b id="incomeMonth">R$ 0,00</b></div><div><span>Desconsiderando programadas</span><b id="expenseMonth">R$ 0,00</b></div></div>
+        </div>
+        <div class="action-grid"><button id="addExpense" class="action-card expense btn-arte" type="button"><span class="action-icon">−</span><span><b>Adicionar Despesa</b><small>Registrar gasto</small></span></button><button id="addIncome" class="action-card income btn-arte" type="button"><span class="action-icon">+</span><span><b>Adicionar Renda</b><small>Registrar entrada</small></span></button></div>
+        <div class="section-head"><div><p class="eyebrow">RESUMO</p><h3>Despesas por categoria</h3></div><button class="link-btn" type="button" data-nav="analysis">Ver análise</button></div>
+        <div id="categorySummary" class="category-list glass"></div>
+        <div class="section-head"><div><p class="eyebrow">RECENTES</p><h3>Últimas transações</h3></div></div>
+        <div id="recentTransactions" class="transaction-list"></div>
+      </section>
+
+      <section id="page-analysis" class="page">
+        <div class="page-heading"><div><p class="eyebrow">ANÁLISE FINANCEIRA</p><h2>Gastos do ano</h2></div><select id="analysisYear" class="year-select" aria-label="Selecionar ano"></select></div>
+        <article class="analysis-hero glass"><div><span class="muted">Total gasto no ano</span><strong id="analysisYearExpense">R$ 0,00</strong></div><span id="analysisYearLabel" class="analysis-year-label">2026</span></article>
+        <div class="analysis-summary-grid"><article class="analysis-stat glass"><span>Entradas</span><strong id="analysisIncome">R$ 0,00</strong></article><article class="analysis-stat glass"><span>Despesas</span><strong id="analysisExpense">R$ 0,00</strong></article><article class="analysis-stat glass"><span>Saldo</span><strong id="analysisBalance">R$ 0,00</strong></article><article class="analysis-stat glass"><span>Média mensal</span><strong id="analysisAverage">R$ 0,00</strong></article></div>
+        <article class="analysis-card glass"><div class="section-head"><div><p class="eyebrow">EVOLUÇÃO</p><h3>Gastos por mês</h3></div></div><div id="yearlyExpenseChart" class="yearly-chart" aria-label="Gráfico de gastos mensais"></div></article>
+        <div class="analysis-insights"><article class="analysis-insight glass"><span>Maior gasto mensal</span><strong id="highestExpenseMonth">—</strong><small id="highestExpenseMonthValue">R$ 0,00</small></article><article class="analysis-insight glass"><span>Mês com menor gasto</span><strong id="lowestExpenseMonth">—</strong><small id="lowestExpenseMonthValue">R$ 0,00</small></article></div>
+        <article class="analysis-card glass"><div class="section-head"><div><p class="eyebrow">CATEGORIAS</p><h3>Onde seu dinheiro foi gasto</h3></div></div><div id="yearlyCategoryChart" class="category-list"></div></article>
+        <article class="analysis-card glass"><div class="section-head"><div><p class="eyebrow">COMPARAÇÃO</p><h3>Entradas x despesas</h3></div></div><div id="incomeExpenseChart" class="income-expense-chart"></div></article>
+        <article class="export-card glass"><div><p class="eyebrow">EXPORTAR</p><h3>Levar meus dados</h3><p class="muted">Exporte o resumo do ano selecionado para compartilhar, guardar ou abrir no computador.</p></div><div class="export-actions"><button id="exportPdf" class="btn btn-secondary" type="button">PDF</button><button id="exportXlsx" class="btn btn-secondary" type="button">XLSX</button><button id="exportTxt" class="btn btn-secondary" type="button">TXT</button></div></article>
+      </section>
+
+      <section id="page-transactions" class="page">
+        <div class="page-heading"><div><p class="eyebrow">MOVIMENTAÇÕES</p><h2>Transações</h2></div><button id="addTransactionTop" class="btn btn-primary btn-small" type="button">+ Adicionar</button></div>
+        <div class="filters glass"><input id="transactionSearch" type="search" placeholder="Buscar descrição ou categoria..." aria-label="Buscar transações"><select id="transactionType" aria-label="Filtrar por tipo"><option value="all">Todas</option><option value="expense">Despesas</option><option value="income">Rendas</option></select><select id="transactionStatus" aria-label="Filtrar por situação"><option value="all">Todas as situações</option><option value="past">Já realizadas</option><option value="scheduled">Programadas</option></select></div>
+        <div class="transaction-legend glass"><div class="transaction-legend-item"><span class="transaction-dot expense-dot"></span><span>Gasto já realizado</span></div><div class="transaction-legend-item"><span class="transaction-dot income-dot"></span><span>Renda recebida</span></div><div class="transaction-legend-item"><span class="transaction-dot scheduled-dot"></span><span>Gasto programado</span></div></div>
+        <div id="allTransactions" class="transaction-list"></div>
+      </section>
+
+      <section id="page-goals" class="page"><div class="page-heading"><div><p class="eyebrow">PLANEJAMENTO</p><h2>Metas</h2></div><button id="addGoal" class="btn btn-primary btn-small" type="button">+ Nova meta</button></div><div id="goalsList" class="goals-list"></div></section>
+
+      <section id="page-profile" class="page">
+        <div class="page-heading"><div><p class="eyebrow">PREFERÊNCIAS</p><h2>Perfil & Configurações</h2></div></div>
+        <article class="profile-card glass"><div class="profile-photo-wrap"><img id="profileAvatar" class="profile-avatar" src="logo-192.png" alt="Foto de perfil"><label class="photo-edit" for="profilePhoto" aria-label="Alterar foto">✎<input id="profilePhoto" type="file" accept="image/*" hidden></label></div><div class="profile-fields"><label>Nome de usuário<input id="profileUsername" maxlength="40"></label><label>E-mail<input id="profileEmail" type="email" maxlength="120"></label><button id="saveProfile" class="btn btn-primary btn-small" type="button">Salvar perfil</button></div></article>
+        <article class="settings-card glass"><div class="setting-row"><div><b>Tema</b><small>Escolha como o aplicativo deve aparecer.</small></div><select id="themeSelect" class="theme-select" aria-label="Selecionar tema"><option value="system">Dispositivo</option><option value="light">Claro</option><option value="dark">Escuro</option></select></div><div class="setting-row"><div><b>PIN de bloqueio</b><small id="pinStatus">Desativado</small></div><button id="configurePin" class="btn btn-secondary btn-small" type="button">Configurar</button></div></article>
+        <article class="backup-card glass"><p class="eyebrow">BACKUP DE SEGURANÇA</p><h3>Leve seus dados com você</h3><p class="muted">Gere um arquivo JSON com seu perfil, transações, metas e configurações.</p><div class="backup-actions"><button id="backupNow" class="btn btn-primary btn-arte" type="button">Fazer Backup Agora</button><button id="restoreData" class="btn btn-secondary" type="button">Restaurar Dados</button><input id="restoreInput" type="file" accept=".json,application/json" hidden></div><p id="lastBackupStatus" class="backup-last">Nenhum backup feito ainda.</p><p id="backupStatus" class="status-message" role="status"></p><div class="backup-tip"><b>📱 No iPhone:</b> toque em <strong>Fazer Backup Agora</strong> → <strong>Salvar em Arquivos</strong> → <strong>iCloud Drive</strong>.</div></article>
+        <article class="danger-card glass"><p class="eyebrow">SESSÃO</p><button id="logout" class="btn btn-secondary" type="button">Sair da conta</button></article>
+      </section>
+    </div>
+
+    <nav class="bottom-nav glass" aria-label="Navegação principal">
+      <button class="nav-btn active" data-nav="dashboard" type="button" aria-current="page"><span>⌂</span><small>Início</small></button>
+      <button class="nav-btn" data-nav="analysis" type="button"><span>◫</span><small>Análise</small></button>
+      <button class="nav-btn" data-nav="transactions" type="button"><span>⇄</span><small>Transações</small></button>
+      <button class="nav-btn" data-nav="goals" type="button"><span>◎</span><small>Metas</small></button>
+      <button class="nav-btn" data-nav="profile" type="button"><span>●</span><small>Perfil</small></button>
+    </nav>
+  </main>
+
+  <div id="modalRoot" class="modal-root hidden"></div>
+  <div id="messageCardRoot" class="overlay-root hidden"></div>
+  <div id="assistantRoot" class="overlay-root hidden">
+    <div class="assistant-backdrop">
+      <article class="assistant-card glass" role="dialog" aria-modal="true" aria-labelledby="assistantTitle">
+        <header class="assistant-head">
+          <div class="assistant-brand"><img src="logo-192.png" alt=""><div><p class="eyebrow">ASSISTENTE SANTINHO</p><h2 id="assistantTitle">Como posso ajudar?</h2></div></div>
+          <button id="assistantClose" class="modal-close" type="button" aria-label="Fechar assistente">×</button>
+        </header>
+        <div id="assistantMessages" class="assistant-messages" aria-live="polite"></div>
+        <div id="assistantSuggestions" class="assistant-suggestions"></div>
+        <form id="assistantInputForm" class="assistant-input-form" autocomplete="off">
+          <textarea id="assistantInput" rows="2" maxlength="500" placeholder="Digite ou toque no microfone para falar..." aria-label="Mensagem para o assistente"></textarea>
+          <div class="assistant-input-actions">
+            <button id="assistantMic" class="assistant-mic" type="button" aria-label="Falar com o assistente" title="Falar">🎙️</button>
+            <button class="btn btn-primary" type="submit">Enviar</button>
+          </div>
+        </form>
+        <p class="assistant-local-note">🔒 O assistente usa os dados financeiros já salvos neste aparelho. Nenhuma movimentação é enviada para um servidor.</p>
+      </article>
+    </div>
+  </div>
+  <div id="privacyCardRoot" class="overlay-root hidden"><div class="privacy-backdrop"><article class="privacy-card glass" role="dialog" aria-modal="true" aria-labelledby="privacyTitle"><img src="logo.png" alt="Santinho Finance" class="privacy-logo"><p class="eyebrow">PRIVACIDADE DO SANTINHO</p><h2 id="privacyTitle">Seus dados financeiros ficam neste aparelho.</h2><p>O Santinho Finance funciona localmente. Suas transações, metas e configurações são armazenadas no navegador deste dispositivo usando armazenamento local.</p><p>O aplicativo não possui banco de dados financeiro centralizado nem envia suas movimentações para um servidor.</p><p class="privacy-warning">Por segurança, mantenha seus backups em um local confiável. Se o armazenamento do navegador for apagado, os dados locais podem ser perdidos.</p><label class="privacy-check"><input id="privacyDontShow" type="checkbox"><span>Não mostrar novamente</span></label><button id="privacyAccept" class="btn btn-primary" type="button">Entendi</button></article></div></div>
+  <button id="voiceAssistant" class="voice-fab" type="button" aria-label="Abrir assistente do Santinho" title="Falar ou escrever para o Santinho">✨</button>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</div>
+<script src="app.js" defer></script>
+</body>
+</html>
