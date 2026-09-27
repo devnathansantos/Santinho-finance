@@ -1,215 +1,150 @@
 # 👻 Santinho Finance
 
-> Um aplicativo financeiro pessoal, privado e 100% client-side, desenvolvido como uma Progressive Web App (PWA).
+Um aplicativo de controle financeiro pessoal, simples, privado e desenvolvido para funcionar diretamente no dispositivo do usuário.
 
-O **Santinho Finance** foi criado para facilitar o controle financeiro pessoal sem depender de servidores, bancos de dados externos ou serviços de terceiros.
+## 🔐 Privacidade
 
-Toda a informação financeira é processada e armazenada **localmente no dispositivo do usuário**.
+O Santinho Finance foi desenvolvido com foco em privacidade.
 
----
+- Os dados financeiros ficam armazenados localmente no dispositivo.
+- Não existe banco de dados financeiro central.
+- Não existe servidor recebendo suas movimentações.
+- O aplicativo não precisa de uma conta externa para funcionar.
+- GitHub Pages é utilizado apenas para hospedar os arquivos do aplicativo.
+- Seus dados financeiros não são enviados para o GitHub.
+- Cada dispositivo possui seus próprios dados locais.
 
-## ✨ Visão geral
-
-O Santinho Finance permite registrar e acompanhar:
-
-- 💰 Entradas
-- 💸 Despesas
-- 📊 Análises financeiras
-- 🎯 Metas
-- 👤 Perfil
-- 🔐 Senha e PIN local
-- 🌙 Tema claro e escuro
-- 💾 Backup e restauração
-- 📱 Instalação como aplicativo no celular
-- 📴 Funcionamento offline após o primeiro carregamento
-
-O projeto foi desenvolvido pensando principalmente em **celulares**, especialmente no uso como aplicativo instalado no iPhone através do Safari.
+> ⚠️ Como os dados ficam armazenados localmente, é importante realizar backups regularmente.
 
 ---
 
-## 🔒 Privacidade
+## 💰 Recursos
 
-O Santinho Finance foi projetado para não depender de um servidor financeiro.
+### Dashboard
 
-### Os dados financeiros ficam no dispositivo
+- Saldo atual
+- Receitas
+- Despesas
+- Resultado financeiro
+- Evolução financeira
+- Distribuição de despesas
+- Transações recentes
+- Metas financeiras
 
-As informações do usuário são armazenadas utilizando:
+### Transações
 
-- **IndexedDB**
-- **localStorage**
+- Adicionar receitas
+- Adicionar despesas
+- Valores em reais
+- Suporte a valores decimais com vírgula
+- Categorias
+- Datas
+- Descrições
+- Transações recorrentes
+- Recorrência diária
+- Recorrência semanal
+- Recorrência quinzenal
+- Recorrência mensal
+- Data final para recorrências
+- Identificação de lançamentos programados
 
-O GitHub Pages hospeda apenas os arquivos do aplicativo.
+### Metas
 
-O repositório **não recebe automaticamente**:
+- Criar metas
+- Definir valor desejado
+- Acompanhar progresso
+- Registrar contribuições
+- Excluir metas
 
-- salários;
-- despesas;
-- receitas;
-- metas;
-- transações;
-- senhas;
-- PIN;
-- informações financeiras.
+### Perfil
 
-### Importante
+- Nome de usuário
+- E-mail
+- Foto de perfil
+- Alteração de tema
+- Tema do dispositivo
+- Tema claro
+- Tema escuro
+- Bloqueio por PIN
 
-O fato de os dados serem locais significa que o usuário é responsável por manter seus próprios backups.
+### Backup
 
-Se os dados locais do navegador forem apagados, o backup `.json` poderá ser utilizado para restaurá-los.
+O aplicativo possui recursos para:
 
----
+- Criar backup dos dados
+- Compartilhar o backup
+- Baixar o arquivo de backup
+- Restaurar dados através de um arquivo JSON
 
-# 🚀 Funcionalidades
-
-## 🏠 Dashboard
-
-A tela inicial apresenta uma visão geral das finanças.
-
-Inclui:
-
-- saldo atual;
-- total de entradas;
-- total de despesas;
-- movimentações recentes;
-- categorias de gastos;
-- atalhos para adicionar entrada ou despesa;
-- frase motivacional do Santinho.
-
----
-
-## 💰 Entradas e despesas
-
-É possível registrar movimentações financeiras informando dados como:
-
-- tipo da movimentação;
-- valor;
-- categoria;
-- data;
-- descrição.
-
-As movimentações são armazenadas localmente e utilizadas automaticamente nos cálculos do aplicativo.
+O backup é realizado pelo próprio usuário e deve ser guardado em um local seguro.
 
 ---
 
-## 📊 Análise financeira
+## 📱 PWA
 
-A seção **Análise** transforma as transações registradas em informações mais fáceis de interpretar.
+O Santinho Finance pode ser instalado como aplicativo no celular.
 
-Inclui:
+No iPhone:
 
-- seleção do ano;
-- total anual de despesas;
-- total anual de entradas;
-- saldo anual;
-- média mensal de despesas;
-- mês com maior gasto;
-- mês com menor gasto;
-- evolução das despesas ao longo dos meses;
-- distribuição das despesas por categoria.
+1. Abra o aplicativo pelo Safari.
+2. Toque em **Compartilhar**.
+3. Escolha **Adicionar à Tela de Início**.
+4. Confirme a instalação.
 
-### Gastos mensais
-
-Os valores de cada mês são calculados diretamente a partir das transações registradas.
-
-Assim, os gráficos não são dados fictícios ou estáticos:
-
-> **quanto mais o usuário registra, mais a análise representa sua realidade financeira.**
+Depois disso, o Santinho Finance poderá ser aberto como um aplicativo independente.
 
 ---
 
-## 🎯 Metas financeiras
+## 🗂️ Armazenamento
 
-O usuário pode criar objetivos financeiros e acompanhar seu progresso.
+O aplicativo utiliza tecnologias nativas do navegador:
 
-Uma meta pode representar, por exemplo:
+- IndexedDB
+- localStorage
 
-- comprar um computador;
-- fazer uma viagem;
-- montar uma reserva;
-- comprar um celular;
-- economizar para um projeto.
+Nenhuma dessas tecnologias representa um banco de dados compartilhado entre usuários.
 
-O progresso é calculado a partir do valor atual e do objetivo definido.
+Cada instalação/dispositivo possui seu próprio armazenamento local.
 
 ---
 
-## 👤 Perfil
+## 🌐 Hospedagem
 
-O perfil permite configurar informações pessoais utilizadas pelo aplicativo.
+O projeto pode ser hospedado gratuitamente utilizando GitHub Pages.
 
-Também é possível:
+O GitHub hospeda apenas os arquivos necessários para executar o aplicativo.
 
-- adicionar foto;
-- alterar informações do perfil;
-- visualizar configurações;
-- alterar o tema;
-- configurar PIN;
-- realizar backup;
-- restaurar dados;
-- bloquear o aplicativo;
-- sair da sessão.
+Os dados financeiros criados pelo usuário permanecem no armazenamento local do dispositivo.
 
 ---
 
-# 🔐 Segurança
+## 🛠️ Tecnologias
 
-O Santinho Finance foi desenvolvido com foco em segurança no lado do cliente.
-
-### Senha
-
-A senha não é simplesmente armazenada como texto puro.
-
-O aplicativo utiliza:
-
-- Web Crypto API;
-- PBKDF2;
-- SHA-256;
-- salt aleatório.
-
-### PIN
-
-O usuário pode configurar um PIN adicional para bloquear o aplicativo.
-
-O PIN também é armazenado utilizando hash.
-
-### Conteúdo local
-
-O aplicativo não utiliza:
-
-- APIs financeiras externas;
-- analytics;
-- servidores próprios;
-- banco de dados remoto;
-- login social;
-- serviços externos para armazenar transações.
+- HTML5
+- CSS3
+- JavaScript
+- IndexedDB
+- localStorage
+- Service Worker
+- Web App Manifest
+- PWA
+- GitHub Pages
 
 ---
 
-# 💾 Backup
-
-O Santinho Finance possui sistema de backup através de arquivos `.json`.
-
-O usuário pode gerar uma cópia dos dados e salvá-la, por exemplo, no:
-
-- iCloud Drive;
-- Google Drive;
-- OneDrive;
-- computador;
-- armazenamento local;
-- outro serviço de arquivos.
-
-No iPhone, o fluxo recomendado é:
-
-**Perfil → Fazer Backup Agora → Compartilhar → Salvar em Arquivos**
-
-### ⚠️ Recomendação
-
-Mantenha mais de uma cópia do backup.
-
-Por exemplo:
+## 📁 Estrutura
 
 ```text
-Santinho-Finance/
-├── backup-2026-09-01.json
-├── backup-2026-09-15.json
-└── backup-2026-09-30.json
+Santinho-finance/
+│
+├── index.html
+├── style.css
+├── app.js
+├── manifest.json
+├── sw.js
+├── .nojekyll
+│
+├── logo.png
+├── logo-192.png
+├── logo-512.png
+└── apple-touch-icon.png
