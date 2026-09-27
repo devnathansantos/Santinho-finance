@@ -2058,3 +2058,51 @@ textarea:focus-visible {
   outline: 2px solid var(--accent, #d8ff4f);
   outline-offset: 2px;
 }
+/* =========================================================
+   CORREÇÃO — GRÁFICO DE GASTOS POR MÊS
+   ========================================================= */
+
+.yearly-chart {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(20px, 1fr));
+  gap: 7px;
+  align-items: end;
+  min-height: 190px;
+  height: 190px;
+  padding: 12px 0 0;
+}
+
+.yearly-chart > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  min-width: 0;
+  height: 180px;
+  min-height: 180px;
+}
+
+.yearly-chart-bar {
+  display: block;
+  width: min(100%, 22px);
+  min-height: 2px;
+  flex: 0 0 auto;
+  flex-shrink: 0;
+
+  border-radius: 999px 999px 5px 5px;
+
+  background: linear-gradient(
+    180deg,
+    var(--expense),
+    rgba(255, 100, 100, 0.45)
+  );
+}
+
+.yearly-chart-label {
+  display: block;
+  flex: 0 0 auto;
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 0.57rem;
+  text-transform: uppercase;
+}
